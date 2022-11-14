@@ -1,0 +1,92 @@
+{
+    "id": "idleuh",
+    "title": "Idleuh",
+    "author": "Idle",
+    "description": "Des trucs pour Corsaire",
+    "authors": [
+        {
+            "name": "Idle",
+            "discord": "Idle#3251"
+        }
+    ],
+    "version": "1.0.0",
+    "relationships": {
+        "systems": [
+            {
+                "id": "pf2e",
+                "type": "system",
+                "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
+                "compatibility": {
+                    "minimum": "4.3.4"
+                }
+            }
+        ]
+    },
+    "packs": [
+        {
+            "name": "actors",
+            "label": "Idleuh (actors lv1)",
+            "system": "pf2e",
+            "path": "packs/idleuh-actors.db",
+            "type": "Actor",
+            "private": false,
+            "flags": {}
+        },
+        {
+            "name": "effects",
+            "label": "Idleuh (effects)",
+            "system": "pf2e",
+            "path": "packs/idleuh-effects.db",
+            "type": "Item",
+            "private": false,
+            "flags": {}
+        },
+        {
+            "name": "gm-macros",
+            "label": "Idleuh (gm macros)",
+            "system": "pf2e",
+            "path": "packs/idleuh-gm-macros.db",
+            "type": "Macro",
+            "private": false,
+            "flags": {}
+        },
+        {
+            "name": "players-macros",
+            "label": "Idleuh (players macros)",
+            "system": "pf2e",
+            "path": "packs/idleuh-players-macros.db",
+            "type": "Macro",
+            "private": false,
+            "flags": {}
+        },
+        {
+            "name": "scripts-macros",
+            "label": "Idleuh (scripts macros)",
+            "system": "pf2e",
+            "path": "packs/idleuh-scripts-macros.db",
+            "type": "Macro",
+            "private": false,
+            "flags": {}
+        },
+        {
+            "name": "no-use-macros",
+            "label": "Idleuh (do not use)",
+            "system": "pf2e",
+            "path": "packs/idleuh-no-use-macros.db",
+            "type": "Macro",
+            "private": false,
+            "flags": {}
+        }
+    ],
+    "compatibility": {
+        "minimum": "10.290",
+        "verified": "10"
+    },
+    "manifestPlusVersion": "1.2.0",
+    "url": "https://github.com/reonZ/idleuh",
+    "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
+    "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.0.0/module.zip",
+    "changelog": "https://github.com/reonZ/idleuh/releases",
+    "bugs": "https://github.com/reonZ/idleuh/issues"
+}
