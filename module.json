@@ -9,7 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "relationships": {
         "systems": [
             {
@@ -67,15 +67,6 @@
             "type": "Macro",
             "private": false,
             "flags": {}
-        },
-        {
-            "name": "no-use-macros",
-            "label": "Idleuh (do not use)",
-            "system": "pf2e",
-            "path": "packs/idleuh-no-use-macros.db",
-            "type": "Macro",
-            "private": false,
-            "flags": {}
         }
     ],
     "compatibility": {
@@ -86,7 +77,7 @@
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.0.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.0.1/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/releases",
     "bugs": "https://github.com/reonZ/idleuh/issues"
 }
