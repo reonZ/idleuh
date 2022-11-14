@@ -1,1 +1,1 @@
-# FoundryVTT Module ID
+# FoundryVTT Trucs pour Corsaire
