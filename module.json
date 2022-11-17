@@ -41,6 +41,24 @@
             "flags": {}
         },
         {
+            "name": "actions",
+            "label": "Idleuh (actions)",
+            "system": "pf2e",
+            "path": "packs/idleuh-actions.db",
+            "type": "Item",
+            "private": false,
+            "flags": {}
+        },
+        {
+            "name": "feats",
+            "label": "Idleuh (feats)",
+            "system": "pf2e",
+            "path": "packs/idleuh-feats.db",
+            "type": "Item",
+            "private": false,
+            "flags": {}
+        },
+        {
             "name": "gm-macros",
             "label": "Idleuh (gm macros)",
             "system": "pf2e",
@@ -72,12 +90,12 @@
         "minimum": "10.290",
         "verified": "10"
     },
-    "version": "1.0.2",
+    "version": "1.0.3",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.0.2/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.0.3/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/releases",
     "bugs": "https://github.com/reonZ/idleuh/issues"
 }
