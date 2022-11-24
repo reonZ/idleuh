@@ -9,6 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
+    "esmodules": ["scripts/main.js"],
     "relationships": {
         "systems": [
             {
