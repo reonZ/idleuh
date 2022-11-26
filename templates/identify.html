@@ -1,27 +1,25 @@
-{{#unless items.length}}
-<p style="text-align: center"><strong>There are no items to identify in the pockets of your players</strong></p>
-{{/unless}} {{#each items}}
-<div
-    data-uuid="{{this.uuid}}"
-    data-type="item"
-    class="flexrow"
-    style="padding: 4px 6px; border-radius: 2px; align-items: center; gap: 4px"
->
-    <div
-        class="flex0"
-        style="
-            background: center / contain no-repeat url({{this.img}});
-            padding: 12px;
-            box-shadow: inset 0 0 0 1px var(--tertiary);
-            border-radius: 3px;
-        "
-    ></div>
-    <div data-type="name">{{{this.name}}}</div>
-    <div style="display: flex; flex-grow: 0; gap: 6px; font-size: 20px">
-        <a title="Post skill checks" data-type="checks" {{{this.disabled}}}><i class="fas fa-dice-d20"></i></a>
-        <a title="Identify Item" data-type="identify" {{{this.disabled}}}><i class="fas fa-question-circle"></i></a>
-        <a title="Remove from list" data-type="remove"><i class="fas fa-square-{{this.remove}}"></i></a>
+<div>
+    {{#unless items.length}}
+    <p class="no-item"><strong>There are no items to identify in the pockets of your players</strong></p>
+    {{/unless}} {{#each items}}
+    <div data-item="{{this.uuid}}" class="{{this.css}}">
+        <div class="img" style="background-image: url({{this.img}});"></div>
+        <div class="name">{{{this.name}}}</div>
+        <div class="actions">
+            <a title="Send to Chat" data-action="chat">
+                <i class="fas fa-message"></i>
+            </a>
+            <a title="Post skill checks" data-action="checks">
+                <i class="fas fa-dice-d20"></i>
+            </a>
+            <a title="Identify Item" data-action="identify">
+                <i class="fas fa-{{#if this.identified}}rotate-left{{else}}question-circle{{/if}}"></i>
+            </a>
+            <a title="Remove from list" data-action="remove">
+                <i class="fas fa-square-{{#if this.checked}}plus{{else}}minus{{/if}}"></i>
+            </a>
+        </div>
     </div>
+    {{/each}}
+    <button type="button" data-action="reset" {{disabled (not items.length)}}>Reset All</button>
 </div>
-{{/each}}
-<button type="button" style="margin-top: 0.5em" {{#unless items.length}}disabled{{/unless}}>Reset All</button>

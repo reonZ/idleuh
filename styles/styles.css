@@ -1,0 +1,56 @@
+#idleuh-manual-token input[type=number] {
+  max-width: 60px;
+  text-align: center;
+}
+#idleuh-manual-token .buttons {
+  display: flex;
+  margin-top: 0.5em;
+}
+
+#idleuh-identify .no-item {
+  text-align: center;
+}
+#idleuh-identify [data-item] {
+  display: flex;
+  padding: 4px 6px;
+  border-radius: 2px;
+  align-items: center;
+  gap: 4px;
+}
+#idleuh-identify [data-item]:hover {
+  background-color: rgba(0, 0, 0, 0.1215686275);
+}
+#idleuh-identify [data-item] .img {
+  flex: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 12px;
+  box-shadow: inset 0 0 0 1px var(--tertiary);
+  border-radius: 3px;
+}
+#idleuh-identify [data-item] .name {
+  flex: 1;
+}
+#idleuh-identify [data-item] .actions {
+  flex: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  font-size: 20px;
+}
+#idleuh-identify [data-item].checked .name {
+  -webkit-text-decoration-line: line-through;
+          text-decoration-line: line-through;
+}
+#idleuh-identify [data-item].identified .name {
+  color: red;
+}
+#idleuh-identify [data-item].checked :is([data-action=checks], [data-action=identify]), #idleuh-identify [data-item].identified :is([data-action=checks], [data-action=remove]), #idleuh-identify [data-item]:not(.identified) [data-action=chat] {
+  color: grey;
+  text-shadow: none;
+  pointer-events: none;
+}
+#idleuh-identify button {
+  margin-top: 0.5em;
+}

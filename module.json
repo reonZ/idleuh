@@ -9,6 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
+    "styles": ["styles/styles.css"],
     "esmodules": ["scripts/main.js"],
     "relationships": {
         "systems": [
@@ -17,7 +18,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "4.3.4"
+                    "minimum": "4.4.1"
                 }
             }
         ]
@@ -91,12 +92,12 @@
         "minimum": "10.290",
         "verified": "10"
     },
-    "version": "1.0.5",
+    "version": "1.1.0",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.0.5/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.1.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/releases",
     "bugs": "https://github.com/reonZ/idleuh/issues"
 }

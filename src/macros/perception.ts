@@ -8,18 +8,17 @@ export async function groupPerception() {
 
     let result = '<hr>'
 
-    const tokens = /** @type {TokenLayerPF2e} */ (canvas.tokens)
+    const tokens = canvas.tokens as TokenLayerPF2e
     for (const token of tokens.placeables) {
         const actor = token.actor
-        if (!actor || !actor.hasPlayerOwner || !actor.attributes.perception) continue
+        if (!actor || !actor.isOfType('character', 'npc') || !actor.hasPlayerOwner || !actor.attributes.perception) continue
         result += await rollPerception(actor)
     }
 
     ChatMessage.create({ content: result, flavor: 'Group Perception Checks', whisper: [game.user.id] })
 }
 
-/** @param {ActorPF2e} actor */
-async function rollPerception(actor) {
+async function rollPerception(actor: CharacterPF2e | NPCPF2e) {
     const perception = actor.attributes.perception
     const check = new game.pf2e.CheckModifier('', perception)
     const roll = await game.pf2e.Check.roll(check, { actor: actor, type: 'skill-check', createMessage: false })
