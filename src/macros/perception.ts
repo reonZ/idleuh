@@ -21,7 +21,7 @@ export async function groupPerception() {
 async function rollPerception(actor: CharacterPF2e | NPCPF2e) {
     const perception = actor.attributes.perception
     const check = new game.pf2e.CheckModifier('', perception)
-    const roll = await game.pf2e.Check.roll(check, { actor: actor, type: 'skill-check', createMessage: false })
+    const roll = await game.pf2e.Check.roll(check, { actor: actor, type: 'skill-check', createMessage: false, skipDialog: true })
     if (!roll) return ''
 
     const rank = proficiency[(perception.rank ?? 1) - 1]
