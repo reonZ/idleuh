@@ -1,11 +1,14 @@
 var $1623e5e7c705b7c7$export$2e2bcd8739ae039 = "idleuh";
 
 
+function $f13521bdeed07ab3$export$90835e7e06f4e75b(id) {
+    return game.modules.get(id);
+}
 function $f13521bdeed07ab3$export$afac0fc6c5fe0d6() {
-    return game.modules.get((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039));
+    return $f13521bdeed07ab3$export$90835e7e06f4e75b((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039));
 }
 function $f13521bdeed07ab3$export$d60ce5b76fc8cf55(id) {
-    return game.modules.get(id)?.api;
+    return $f13521bdeed07ab3$export$90835e7e06f4e75b(id)?.api;
 }
 
 
