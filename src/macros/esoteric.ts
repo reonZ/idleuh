@@ -42,6 +42,7 @@ export function esotericCheck(event: JQuery.TriggeredEvent, actor: ActorPF2e) {
         ),
         {
             actor,
+            title: game.i18n.format('PF2E.SkillCheckWithName', { skillName }),
             type: 'skill-check',
             options,
             dc: { value: DC },
