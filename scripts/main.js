@@ -19,14 +19,19 @@ function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
         ui.notifications.warn("You must select a character token you own and target another one.");
         return;
     }
-    const skillName = "Esoteric";
-    const skillKey = "esoteric";
-    const actionSlug = "action:recall-knowledge";
-    const actionName = "Recall Knowledge";
-    if (!(skillKey in actor.system.skills)) {
-        ui.notifications.warn(`This character doesn't have the '${skillName}' skill`);
+    const skillKeys = [
+        "esoteric",
+        "esoteric-lore",
+        "lore-esoteric"
+    ];
+    const skill = Object.values(actor.system.skills).find((x)=>skillKeys.includes(x.slug));
+    if (!skill) {
+        ui.notifications.warn(`This character doesn't have the 'Esoteric' skill`);
         return;
     }
+    const skillName = skill.label;
+    const actionSlug = "action:recall-knowledge";
+    const actionName = game.i18n.localize("PF2E.RecallKnowledge.Label");
     const DCbyLevel = [
         14,
         15,
@@ -70,9 +75,20 @@ function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
         return prev;
     }, 0);
     const v = vulnerability ? ` ${vulnerability}` : "";
-    const link = `@UUID[Compendium.idleuh.effects.MqgbuaqGMJ92VRze]{Effect: Exploit Vulnerability${v}}`;
-    game.pf2e.Check.roll(new game.pf2e.CheckModifier(`<span class="pf2-icon">A</span> <b>${actionName}</b> - <p class="compact-text">${skillName} Skill Check</p><p><strong>Success</strong> ${link}</p><p><strong>Failure</strong> @UUID[Compendium.idleuh.effects.MqgbuaqGMJ92VRze]{Effect: Exploit Vulnerability}</p><p><strong>Critical Failure</strong> @UUID[Compendium.pf2e.conditionitems.AJh5ex99aV6VTggg]{Flat-Footed}</p>`, actor.system.skills[skillKey]), {
+    const uuid = "@UUID[Compendium.idleuh.effects.MqgbuaqGMJ92VRze]";
+    const success = game.i18n.localize("PF2E.Check.Result.Degree.Check.success");
+    const failure = game.i18n.localize("PF2E.Check.Result.Degree.Check.failure");
+    const criticalFailure = game.i18n.localize("PF2E.Check.Result.Degree.Check.criticalFailure");
+    let content = `<span class="pf2-icon">A</span> <b>${actionName}</b> - <p class="compact-text">${skillName}</p>`;
+    content += `<p><strong>${success}</strong> ${uuid}{Effect: Exploit Vulnerability${v}}</p>`;
+    content += `<p><strong>${failure}</strong> ${uuid}</p>`;
+    content += `<p><strong>${criticalFailure}</strong> @UUID[Compendium.pf2e.conditionitems.AJh5ex99aV6VTggg]</p>`;
+    game.pf2e.Check.roll(new game.pf2e.CheckModifier(content, skill), {
         actor: actor,
+        target: {
+            actor: target.actor,
+            token: target.document
+        },
         title: game.i18n.format("PF2E.SkillCheckWithName", {
             skillName: skillName
         }),
@@ -95,6 +111,9 @@ function $ee65ef5b7d5dd2ef$export$79b67f6e2f31449(...path) {
 function $ee65ef5b7d5dd2ef$export$bdd507c72609c24e(...path) {
     return `modules/${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}/templates/${path.join("/")}`;
 }
+function $ee65ef5b7d5dd2ef$export$6d1a79e7c04100c2(...path) {
+    return `modules/${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}/images/${path.join("/")}`;
+}
 
 
 /** Check if a key is present in a given object in a type safe way */ function $42b0de5e6394e858$export$c9d769b6fdd2a91d(obj, key) {
@@ -107,6 +126,15 @@ function $ee65ef5b7d5dd2ef$export$bdd507c72609c24e(...path) {
 }
 
 
+const $1411bf92270cf048$export$c6f5f26a78b4295b = new Set([
+    "armor",
+    "backpack",
+    "book",
+    "consumable",
+    "equipment",
+    "treasure",
+    "weapon"
+]);
 const $1411bf92270cf048$export$12237db074fd27c0 = new Map([
     [
         -1,
@@ -315,6 +343,12 @@ function $1411bf92270cf048$export$550a429caca7a4dc(item, { proficiencyWithoutLev
     return {
         dc: dc
     };
+}
+function $1411bf92270cf048$export$d2ea10be675672b(source) {
+    return $1411bf92270cf048$export$9e72cd1a981905c2(source) && "invested" in source.system.equipped;
+}
+function $1411bf92270cf048$export$9e72cd1a981905c2(source) {
+    return (0, $39b388830effa69c$export$7fd671bc170c6856)($1411bf92270cf048$export$c6f5f26a78b4295b, source.type);
 }
 
 
