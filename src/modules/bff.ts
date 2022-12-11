@@ -1,3 +1,5 @@
+import { getSetting } from '~src/@utils/foundry/settings'
+
 const effectId = 'Item.pFguo7KVVjFMqHhe'
 
 export function enableBFF(enable: boolean) {
@@ -38,7 +40,8 @@ function setDebuff(firstToken: TokenDocument, firstDebuff: EffectPF2e) {
     }
 
     const distance = canvas.grid.measureDistance(firstToken, otherToken, { gridSpaces: true })
-    const debuff = Math.max(distance - 5, 0) / 5
+    const squares = distance / 5
+    const debuff = squares <= getSetting<number>('bffDistance') ? 1 : 0
 
     firstDebuff.update({ 'system.badge.value': debuff })
     otherDebuff.update({ 'system.badge.value': debuff })

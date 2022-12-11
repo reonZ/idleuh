@@ -19,11 +19,21 @@ Hooks.once('init', () => {
 
     game.settings.register(MODULE_ID, 'bff', {
         name: "Enable BFF's Ire",
+        hint: "Should the BFF's Ire be handled.",
         type: Boolean,
         default: true,
         config: true,
         scope: 'world',
         onChange: enableBFF,
+    })
+
+    game.settings.register(MODULE_ID, 'bffDistance', {
+        name: "BFF's Ire Distance",
+        hint: 'Distance in square(s) for the curse to apply.',
+        type: Number,
+        default: 1,
+        config: true,
+        scope: 'world',
     })
 })
 
