@@ -30,87 +30,85 @@
     "packs": [
         {
             "name": "actors",
-            "label": "Idleuh (actors lv1)",
+            "label": "Idleuh (players)",
             "system": "pf2e",
             "path": "packs/idleuh-actors.db",
-            "type": "Actor",
-            "private": false,
-            "flags": {}
+            "type": "Actor"
+        },
+        {
+            "name": "summons",
+            "label": "Idleuh (summons)",
+            "system": "pf2e",
+            "path": "packs/idleuh-summons.db",
+            "type": "Actor"
         },
         {
             "name": "effects",
             "label": "Idleuh (effects)",
             "system": "pf2e",
             "path": "packs/idleuh-effects.db",
-            "type": "Item",
-            "private": false,
-            "flags": {}
+            "type": "Item"
         },
         {
             "name": "actions",
             "label": "Idleuh (actions)",
             "system": "pf2e",
             "path": "packs/idleuh-actions.db",
-            "type": "Item",
-            "private": false,
-            "flags": {}
+            "type": "Item"
         },
         {
             "name": "feats",
             "label": "Idleuh (feats)",
             "system": "pf2e",
             "path": "packs/idleuh-feats.db",
-            "type": "Item",
-            "private": false,
-            "flags": {}
+            "type": "Item"
         },
         {
             "name": "equipment",
             "label": "Idleuh (equipment)",
             "system": "pf2e",
             "path": "packs/idleuh-equipment.db",
-            "type": "Item",
-            "private": false,
-            "flags": {}
+            "type": "Item"
         },
         {
             "name": "gm-macros",
             "label": "Idleuh (gm macros)",
             "system": "pf2e",
             "path": "packs/idleuh-gm-macros.db",
-            "type": "Macro",
-            "private": false,
-            "flags": {}
+            "type": "Macro"
         },
         {
             "name": "players-macros",
             "label": "Idleuh (players macros)",
             "system": "pf2e",
             "path": "packs/idleuh-players-macros.db",
-            "type": "Macro",
-            "private": false,
-            "flags": {}
+            "type": "Macro"
         },
         {
             "name": "scripts-macros",
             "label": "Idleuh (scripts macros)",
             "system": "pf2e",
             "path": "packs/idleuh-scripts-macros.db",
-            "type": "Macro",
-            "private": false,
-            "flags": {}
+            "type": "Macro"
+        },
+        {
+            "name": "tables",
+            "label": "Idleuh (tables)",
+            "system": "pf2e",
+            "path": "packs/idleuh-tables.db",
+            "type": "RollTable"
         }
     ],
     "compatibility": {
         "minimum": "10.290",
         "verified": "10"
     },
-    "version": "1.2.0",
+    "version": "1.3.0",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.2.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.3.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/releases",
     "bugs": "https://github.com/reonZ/idleuh/issues"
 }

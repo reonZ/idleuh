@@ -2,6 +2,7 @@ import { getCurrentModule } from './@utils/foundry/module'
 import { getSetting } from './@utils/foundry/settings'
 import { esotericCheck } from './macros/esoteric'
 import { identify } from './macros/identify'
+import { ripImaginarium } from './macros/imaginarium'
 import { manualToken } from './macros/manual'
 import { groupPerception } from './macros/perception'
 import MODULE_ID from './module'
@@ -14,6 +15,7 @@ Hooks.once('init', () => {
             manualToken,
             groupPerception,
             identify,
+            ripImaginarium,
         },
     }
 

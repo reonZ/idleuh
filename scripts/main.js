@@ -12,6 +12,57 @@ function $f13521bdeed07ab3$export$d60ce5b76fc8cf55(id) {
 }
 
 
+
+
+function $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc(...path) {
+    return `${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}.settings.${path.join(".")}`;
+}
+function $ee65ef5b7d5dd2ef$export$79b67f6e2f31449(...path) {
+    return `flags.${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}.${path.join("/")}`;
+}
+function $ee65ef5b7d5dd2ef$export$bdd507c72609c24e(...path) {
+    path = path.filter((x)=>typeof x === "string");
+    return `modules/${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}/templates/${path.join("/")}`;
+}
+function $ee65ef5b7d5dd2ef$export$6d1a79e7c04100c2(...path) {
+    return `modules/${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}/images/${path.join("/")}`;
+}
+
+
+function $b29eb7e0eb12ddbc$export$8206e8d612b3e63(key) {
+    return game.settings.get((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), key);
+}
+function $b29eb7e0eb12ddbc$export$61fd6f1ddd0c20e2(key, value) {
+    return game.settings.set((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), key, value);
+}
+function $b29eb7e0eb12ddbc$export$3bfe3819d89751f0(options) {
+    const name = options.name;
+    options.scope = options.scope ?? "world";
+    options.config = options.config ?? false;
+    if (options.config) {
+        options.name = (0, $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc)(name, "name");
+        options.hint = (0, $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc)(name, "hint");
+    }
+    if (Array.isArray(options.choices)) options.choices = options.choices.reduce((choices, choice)=>{
+        choices[choice] = (0, $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc)(name, "choices", choice);
+        return choices;
+    }, {});
+    game.settings.register((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), name, options);
+}
+function $b29eb7e0eb12ddbc$export$cd2f7161e4d70860(options) {
+    const name = options.name;
+    options.name = (0, $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc)("menus", name, "name");
+    options.label = (0, $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc)("menus", name, "label");
+    options.hint = (0, $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc)("menus", name, "hint");
+    options.restricted = options.restricted ?? true;
+    options.icon = options.icon ?? "fas fa-cogs";
+    game.settings.registerMenu((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), name, options);
+}
+function $b29eb7e0eb12ddbc$export$8cb4a6769fa1780e() {
+    return game.settings.get("core", "combatTrackerConfig");
+}
+
+
 function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
     const targets = game.user.targets;
     const [target] = targets;
@@ -100,20 +151,6 @@ function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
     }, event);
 }
 
-
-
-function $ee65ef5b7d5dd2ef$export$f6ed52839c6955bc(...path) {
-    return `${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}.settings.${path.join(".")}`;
-}
-function $ee65ef5b7d5dd2ef$export$79b67f6e2f31449(...path) {
-    return `flags.${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}.${path.join("/")}`;
-}
-function $ee65ef5b7d5dd2ef$export$bdd507c72609c24e(...path) {
-    return `modules/${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}/templates/${path.join("/")}`;
-}
-function $ee65ef5b7d5dd2ef$export$6d1a79e7c04100c2(...path) {
-    return `modules/${0, $1623e5e7c705b7c7$export$2e2bcd8739ae039}/images/${path.join("/")}`;
-}
 
 
 /** Check if a key is present in a given object in a type safe way */ function $42b0de5e6394e858$export$c9d769b6fdd2a91d(obj, key) {
@@ -478,6 +515,32 @@ function $2e8e7adddb97c14f$export$65e5b62a4c490288() {
 }
 
 
+const $4d5f7ddf43e0f7d9$var$packId = "pf2e.spells-srd";
+const $4d5f7ddf43e0f7d9$var$bookId = "Item.dcALVAyJbYSovzqt";
+async function $4d5f7ddf43e0f7d9$export$8336e602fcba102(actor) {
+    if (!actor) return ui.notifications.warn("You must select an actor with the Imaginarium");
+    const book = actor.itemTypes.equipment.find((x)=>x.getFlag("core", "sourceId") === $4d5f7ddf43e0f7d9$var$bookId);
+    if (!book || book.system.equipped.carryType === "dropped") return ui.notifications.warn("This actor doesn't have the Imaginarium in their possession");
+    const level = Math.floor(actor.level / 2);
+    const pack = game.packs.get($4d5f7ddf43e0f7d9$var$packId);
+    const index = await pack.getIndex({
+        fields: [
+            "system.level.value",
+            "system.traits",
+            "system.category.value"
+        ]
+    });
+    const spells = index.filter((x)=>x.system.level.value === level && !x.system.traits.value.includes("cantrip") && x.system.category.value !== "ritual" && x.system.category.value !== "focus" && x.system.traits.rarity === "common");
+    const roll = Math.floor(Math.random() * spells.length);
+    const spell = spells[roll];
+    const uuid = `Compendium.${$4d5f7ddf43e0f7d9$var$packId}.${spell._id}`;
+    ChatMessage.create({
+        content: `<p>Ripped the last page of the Imaginarium</p><p>@UUID[${uuid}]</p>`,
+        speaker: ChatMessage.getSpeaker(actor)
+    });
+}
+
+
 
 class $1c772bac1c8002c4$export$c18436ab3784cae9 extends FormApplication {
     static get defaultOptions() {
@@ -583,15 +646,86 @@ async function $3f81a3961091a2a4$var$rollPerception(actor) {
 }
 
 
+
+
+const $23d7d704d6e2c579$var$effectId = "Item.pFguo7KVVjFMqHhe";
+function $23d7d704d6e2c579$export$7951567bc4ba61eb(enable) {
+    if (!game.user.isGM) return;
+    const method = enable ? "on" : "off";
+    Hooks[method]("updateToken", $23d7d704d6e2c579$var$updateToken);
+}
+function $23d7d704d6e2c579$var$getDebuff(actor) {
+    return actor.itemTypes.effect.find((x)=>x.getFlag("core", "sourceId") === $23d7d704d6e2c579$var$effectId);
+}
+function $23d7d704d6e2c579$var$updateToken(token, data) {
+    const actor = token.actor;
+    if (!("x" in data || "y" in data) || !actor) return;
+    const debuff = $23d7d704d6e2c579$var$getDebuff(actor);
+    if (debuff) $23d7d704d6e2c579$var$setDebuff(token, debuff);
+}
+function $23d7d704d6e2c579$var$setDebuff(firstToken, firstDebuff) {
+    let otherToken;
+    let otherDebuff;
+    const tokens = canvas.tokens.placeables;
+    for (const token of tokens){
+        const otherActor = token.actor;
+        if (!otherActor || otherActor === firstToken.actor) continue;
+        const debuff = $23d7d704d6e2c579$var$getDebuff(otherActor);
+        if (!debuff) continue;
+        otherToken = token;
+        otherDebuff = debuff;
+        break;
+    }
+    if (!otherToken || !otherDebuff) {
+        firstDebuff.update({
+            "system.badge.value": 0
+        });
+        return;
+    }
+    const distance = canvas.grid.measureDistance(firstToken, otherToken, {
+        gridSpaces: true
+    });
+    const squares = distance / 5;
+    const debuff1 = squares <= (0, $b29eb7e0eb12ddbc$export$8206e8d612b3e63)("bffDistance") ? 1 : 0;
+    firstDebuff.update({
+        "system.badge.value": debuff1
+    });
+    otherDebuff.update({
+        "system.badge.value": debuff1
+    });
+}
+
+
 Hooks.once("init", ()=>{
     (0, $f13521bdeed07ab3$export$afac0fc6c5fe0d6)().api = {
         macros: {
             esotericCheck: $9a0b513b0704079f$export$a0fd18cfa913f80d,
             manualToken: $dcd79b6d4f0a91cd$export$918e4924dfc1c5e7,
             groupPerception: $3f81a3961091a2a4$export$2d5babad0c808e82,
-            identify: $2e8e7adddb97c14f$export$65e5b62a4c490288
+            identify: $2e8e7adddb97c14f$export$65e5b62a4c490288,
+            ripImaginarium: $4d5f7ddf43e0f7d9$export$8336e602fcba102
         }
     };
+    game.settings.register((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), "bff", {
+        name: "Enable BFF's Ire",
+        hint: "Should the BFF's Ire be handled.",
+        type: Boolean,
+        default: true,
+        config: true,
+        scope: "world",
+        onChange: (0, $23d7d704d6e2c579$export$7951567bc4ba61eb)
+    });
+    game.settings.register((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), "bffDistance", {
+        name: "BFF's Ire Distance",
+        hint: "Distance in square(s) for the curse to apply.",
+        type: Number,
+        default: 1,
+        config: true,
+        scope: "world"
+    });
+});
+Hooks.once("ready", ()=>{
+    if ((0, $b29eb7e0eb12ddbc$export$8206e8d612b3e63)("bff")) (0, $23d7d704d6e2c579$export$7951567bc4ba61eb)(true);
 });
 
 
