@@ -25,7 +25,7 @@ export function esotericCheck(event: JQuery.TriggeredEvent, actor: ActorPF2e) {
     const DC = targetLevel < 0 ? 13 : DCbyLevel[targetLevel]
 
     const options = actor.getRollOptions(['all', 'skill-check', skillName.toLowerCase()])
-    options.push(`action:${actionSlug}`)
+    options.push(actionSlug)
     options.push(`secret`)
 
     const dv = /** @type {Array<{type: String, value: number}>} */ target.actor.system.traits.dv

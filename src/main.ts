@@ -1,6 +1,8 @@
 import { getCurrentModule } from './@utils/foundry/module'
 import { getSetting } from './@utils/foundry/settings'
+import { socketOn } from './@utils/socket'
 import { esotericCheck } from './macros/esoteric'
+import { exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
 import { manualToken } from './macros/manual'
@@ -12,6 +14,7 @@ Hooks.once('init', () => {
     getCurrentModule().api = {
         macros: {
             esotericCheck,
+            exploitVulnerability,
             manualToken,
             groupPerception,
             identify,
@@ -41,4 +44,11 @@ Hooks.once('init', () => {
 
 Hooks.once('ready', () => {
     if (getSetting('bff')) enableBFF(true)
+    if (game.user.isGM) {
+        socketOn(onSocket)
+    }
 })
+
+function onSocket(packet: Packet) {
+    if (packet.type === 'exploit-vulnerability') exploitVulnerabilityGM(packet)
+}

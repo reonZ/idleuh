@@ -63,6 +63,15 @@ function $b29eb7e0eb12ddbc$export$8cb4a6769fa1780e() {
 }
 
 
+
+function $7d0b581a56a65cc7$export$38fd5ae0f7102bdb(callback) {
+    game.socket.on(`module.${(0, $1623e5e7c705b7c7$export$2e2bcd8739ae039)}`, callback);
+}
+function $7d0b581a56a65cc7$export$a2c1d094f400f44a(packet) {
+    game.socket.emit(`module.${(0, $1623e5e7c705b7c7$export$2e2bcd8739ae039)}`, packet);
+}
+
+
 function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
     const targets = game.user.targets;
     const [target] = targets;
@@ -118,7 +127,7 @@ function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
         "skill-check",
         skillName.toLowerCase()
     ]);
-    options.push(`action:${actionSlug}`);
+    options.push(actionSlug);
     options.push(`secret`);
     const dv = /** @type {Array<{type: String, value: number}>} */ target.actor.system.traits.dv;
     const vulnerability = dv.reduce((prev, curr)=>{
@@ -149,6 +158,197 @@ function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
             value: DC
         }
     }, event);
+}
+
+
+
+const $cd81492382603b02$var$effectID = "Item.bPm8eSVCrpYiWW2y";
+const $cd81492382603b02$var$effectUUID = "Compendium.idleuh.effects.MqgbuaqGMJ92VRze";
+const $cd81492382603b02$var$ffUUID = "Compendium.pf2e.conditionitems.AJh5ex99aV6VTggg";
+async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
+    const targets = game.user.targets;
+    const [target] = targets;
+    const targetActor = target?.actor;
+    if (!actor || !actor.isOwner || !actor.isOfType("character") || targets.size !== 1 || !targetActor) {
+        ui.notifications.warn("You must select a character token you own and target another one.");
+        return;
+    }
+    const skillKeys = [
+        "esoteric",
+        "esoteric-lore",
+        "lore-esoteric"
+    ];
+    const skill = Object.values(actor.system.skills).find((x)=>skillKeys.includes(x.slug));
+    if (!skill) {
+        ui.notifications.warn(`This character doesn't have the 'Esoteric' skill`);
+        return;
+    }
+    const actionSlug = "action:recall-knowledge";
+    const DCbyLevel = [
+        14,
+        15,
+        16,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28,
+        30,
+        31,
+        32,
+        34,
+        35,
+        36,
+        38,
+        39,
+        40,
+        42,
+        44,
+        46,
+        48,
+        50
+    ];
+    const targetLevel = targetActor.system.details.level.value;
+    const dc = targetLevel < 0 ? 13 : DCbyLevel[targetLevel];
+    const options = actor.getRollOptions([
+        "all",
+        "skill-check",
+        "Esoteric"
+    ]);
+    options.push(actionSlug);
+    options.push(`secret`);
+    const dv = targetActor.system.attributes.weaknesses;
+    const vulnerability = dv.reduce((prev, curr)=>{
+        if (curr.value > prev) return curr.value;
+        return prev;
+    }, 0);
+    const roll = await game.pf2e.Check.roll(new game.pf2e.CheckModifier("test", skill), {
+        actor: actor,
+        target: {
+            actor: targetActor,
+            token: target.document
+        },
+        title: game.i18n.format("PF2E.SkillCheckWithName", {
+            skillName: "Esoteric"
+        }),
+        type: "skill-check",
+        options: options,
+        dc: {
+            value: dc
+        },
+        createMessage: false
+    }, event);
+    const total = roll.total ?? 0;
+    const success = $cd81492382603b02$var$getSuccess(roll, dc);
+    const packet = {
+        type: "exploit-vulnerability",
+        actorId: actor.id,
+        targetId: target.id,
+        dc: dc,
+        success: success,
+        total: total,
+        vulnerability: vulnerability
+    };
+    if (game.user.isGM) $cd81492382603b02$export$430ded1de715a605(packet);
+    else (0, $7d0b581a56a65cc7$export$a2c1d094f400f44a)(packet);
+}
+async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , targetId: targetId , success: success , vulnerability: vulnerability , dc: dc , total: total  }) {
+    const actor = game.actors.get(actorId);
+    const targetActor = canvas.tokens.get(targetId)?.actor;
+    if (!actor || !targetActor) return;
+    canvas.tokens.placeables.forEach((token)=>{
+        const tokenActor = token.actor;
+        if (!tokenActor || tokenActor === actor) return;
+        const effect = $cd81492382603b02$var$getEffect(tokenActor);
+        if (tokenActor === targetActor) {
+            if (success <= 0 && effect) effect.delete();
+            else if (success >= 1 && !effect) $cd81492382603b02$var$addEffect(tokenActor);
+        } else if (effect) effect.delete();
+    });
+    const effect = $cd81492382603b02$var$getEffect(actor);
+    if (success >= 1) {
+        const badge = success >= 2 && vulnerability || 1;
+        if (!effect) $cd81492382603b02$var$addEffect(actor, badge);
+        else if (effect.badge?.value !== badge) effect.update({
+            "system.badge.value": badge
+        });
+    } else {
+        effect?.delete();
+        $cd81492382603b02$var$addFlatFooted(actor);
+    }
+    $cd81492382603b02$var$createMsg(actor, targetActor, dc, total, success);
+}
+function $cd81492382603b02$var$getSuccess(roll, dc) {
+    const total = roll.total;
+    const die = roll.dice[0].total;
+    let success = total >= dc + 10 ? 3 : total >= dc ? 2 : total > dc - 10 ? 1 : 0;
+    if (die === 20) success++;
+    else if (die === 1) success--;
+    return success;
+}
+function $cd81492382603b02$var$createMsg(actor, target, dc, total, success) {
+    const by = total - dc;
+    const css = success >= 3 ? "criticalSuccess" : success === 2 ? "success" : success === 1 ? "failure" : "criticalFailure";
+    const txt = success >= 3 ? "Critical Success" : success === 2 ? "Success" : success === 1 ? "Failure" : "Critical Failure";
+    let flavor = `<h4 class="action"><span class="pf2-icon">A</span> <b>Exploit Vulnerability</b> <p class="compact-text">(Esoteric Check)</p></h4>
+<div class="target-dc-result" data-visibility="gm">
+    <div class="target-dc" data-visibility="gm"><span data-visibility="gm" data-whose="target">
+        Target: ${target.name}</span> <span data-visibility="gm" data-whose="target">(Standard DC ${dc})</span></div>
+    <div class="result degree-of-success" data-visibility="gm">Result: 
+        <span data-whose="self" class="${css}">${txt}</span> <span data-whose="target">by ${by >= 0 ? "+" : ""}${by}</span>
+    </div>
+</div>`;
+    if (success >= 3) flavor += `<section class="roll-note">
+    <strong>Critical Success</strong> You remember the creature's weaknesses, and as you empower your esoterica, 
+    you have a flash of insight that grants even more knowledge about the creature. 
+    You learn all of the creature's resistances, weaknesses, and immunities, 
+    including the amounts of the resistances and weaknesses and any unusual weaknesses or vulnerabilities, 
+    such as what spells will pass through a golem's antimagic. 
+    You can exploit either the creature's mortal weakness or personal antithesis (see the Exploit Vulnerability class feature). 
+    Your unarmed and weapon Strikes against the creature also become magical if they weren't already.
+</section>`;
+    else if (success === 2) flavor += `<section class="roll-note">
+    <strong>Success</strong> You recall an important fact about the creature, 
+    learning its highest weakness (or one of its highest weaknesses, if it has multiple with the same value) but not its other weaknesses, 
+    resistances, or immunities. You can exploit either the creature's mortal weakness or personal antithesis. 
+    Your unarmed and weapon Strikes against the creature also become magical if they weren't already.
+</section>`;
+    else if (success === 1) flavor += `<section class="roll-note">
+    <strong>Failure</strong> Failing to recall a salient weakness about the creature, 
+    you instead attempt to exploit a more personal vulnerability. 
+    You can exploit only the creature's personal antithesis. 
+    Your unarmed and weapon Strikes against the creature also become magical if they weren't already.
+</section>`;
+    else flavor += `<section class="roll-note">
+<strong>Critical Failure</strong> You couldn't remember the right object to use and become distracted while you rummage through your esoterica. 
+You become flat-footed until the beginning of your next turn.
+</section>`;
+    ChatMessage.create({
+        flavor: flavor,
+        actor: actor
+    });
+}
+function $cd81492382603b02$var$getEffect(actor) {
+    return actor.itemTypes.effect.find((effect)=>effect.getFlag("core", "sourceId") === $cd81492382603b02$var$effectID);
+}
+async function $cd81492382603b02$var$addEffect(actor, badge) {
+    const data = (await fromUuid($cd81492382603b02$var$effectUUID)).toObject();
+    if (badge) setProperty(data, "system.badge.value", badge);
+    actor.createEmbeddedDocuments("Item", [
+        data
+    ]);
+}
+async function $cd81492382603b02$var$addFlatFooted(actor) {
+    const hasEffect = actor.itemTypes.condition.some((x)=>x.getFlag("core", "sourceId") === $cd81492382603b02$var$ffUUID);
+    if (hasEffect) return;
+    const data = (await fromUuid($cd81492382603b02$var$ffUUID)).toObject();
+    actor.createEmbeddedDocuments("Item", [
+        data
+    ]);
 }
 
 
@@ -453,7 +653,7 @@ class $0f4af9d9fc41700b$export$f6e5b10ec9edfc3b extends Application {
                 dc: dc,
                 name: game.i18n.localize(CONFIG.PF2E.skills[shortForm])
             }));
-        const content = await renderTemplate("systems/pf2e/templates/actors/identify-item-chat-skill-checks.html", {
+        const content = await renderTemplate("systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs", {
             itemImg: itemImg,
             itemName: itemName,
             identifiedName: identifiedName,
@@ -700,6 +900,7 @@ Hooks.once("init", ()=>{
     (0, $f13521bdeed07ab3$export$afac0fc6c5fe0d6)().api = {
         macros: {
             esotericCheck: $9a0b513b0704079f$export$a0fd18cfa913f80d,
+            exploitVulnerability: $cd81492382603b02$export$22e7686aa871dc22,
             manualToken: $dcd79b6d4f0a91cd$export$918e4924dfc1c5e7,
             groupPerception: $3f81a3961091a2a4$export$2d5babad0c808e82,
             identify: $2e8e7adddb97c14f$export$65e5b62a4c490288,
@@ -726,7 +927,11 @@ Hooks.once("init", ()=>{
 });
 Hooks.once("ready", ()=>{
     if ((0, $b29eb7e0eb12ddbc$export$8206e8d612b3e63)("bff")) (0, $23d7d704d6e2c579$export$7951567bc4ba61eb)(true);
+    if (game.user.isGM) (0, $7d0b581a56a65cc7$export$38fd5ae0f7102bdb)($b013a5dd6d18443e$var$onSocket);
 });
+function $b013a5dd6d18443e$var$onSocket(packet) {
+    if (packet.type === "exploit-vulnerability") (0, $cd81492382603b02$export$430ded1de715a605)(packet);
+}
 
 
 //# sourceMappingURL=main.js.map

@@ -77,7 +77,7 @@ export class IdleuhIdentifyApp extends Application {
                 name: game.i18n.localize(CONFIG.PF2E.skills[shortForm as keyof typeof CONFIG.PF2E.skills]),
             }))
 
-        const content = await renderTemplate('systems/pf2e/templates/actors/identify-item-chat-skill-checks.html', {
+        const content = await renderTemplate('systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs', {
             itemImg,
             itemName,
             identifiedName,
