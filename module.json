@@ -10,8 +10,12 @@
         }
     ],
     "socket": true,
-    "styles": ["styles/styles.css"],
-    "esmodules": ["scripts/main.js"],
+    "styles": [
+        "styles/styles.css"
+    ],
+    "esmodules": [
+        "scripts/main.js"
+    ],
     "relationships": {
         "systems": [
             {
@@ -100,12 +104,12 @@
         "minimum": "10.290",
         "verified": "10"
     },
-    "version": "1.3.0",
+    "version": "1.4.0",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.3.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.4.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/releases",
     "bugs": "https://github.com/reonZ/idleuh/issues"
 }
