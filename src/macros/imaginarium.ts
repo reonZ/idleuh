@@ -14,7 +14,7 @@ export async function ripImaginarium(actor: ActorPF2e) {
 
     const spells = index.filter(
         x =>
-            x.system.level.value === level &&
+            x.system.level.value <= level &&
             !x.system.traits.value.includes('cantrip') &&
             x.system.category.value !== 'ritual' &&
             x.system.category.value !== 'focus' &&
