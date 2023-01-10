@@ -72,93 +72,132 @@ function $7d0b581a56a65cc7$export$a2c1d094f400f44a(packet) {
 }
 
 
-function $9a0b513b0704079f$export$a0fd18cfa913f80d(event, actor) {
-    const targets = game.user.targets;
-    const [target] = targets;
-    if (!actor || !actor.isOwner || !actor.isOfType("character") || targets.size !== 1 || !target.actor) {
-        ui.notifications.warn("You must select a character token you own and target another one.");
+
+class $aa7e6be2fa64e428$export$136cd48ea541f110 extends Application {
+    constructor(actor, options){
+        super(options);
+        this.actor = actor;
+        this.aura = 0;
+    }
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: "aura-radius",
+            title: "Update Aura Radius",
+            template: (0, $ee65ef5b7d5dd2ef$export$bdd507c72609c24e)("aura-radius.html"),
+            width: 400
+        });
+    }
+    get auras() {
+        return this.actor.itemTypes.effect.filter((x)=>x.rules.some((y)=>y.key === "Aura"));
+    }
+    getData(options) {
+        const auras = this.auras;
+        const aura = auras[this.aura >= 0 && this.aura <= auras.length ? this.aura : 0];
+        const radius = aura.rules.find((x)=>x.key === "Aura").radius;
+        return mergeObject(super.getData(options), {
+            auras: auras,
+            aura: aura.id,
+            radius: radius
+        });
+    }
+    activateListeners(html) {
+        html.find('[name="aura"]').on("change", this.#onAuraChange.bind(this));
+        html.find('[name="radius"]').on("input", this.#onRadiusInput.bind(this)).on("change", this.#onRadiusChange.bind(this));
+    }
+    render(force, options) {
+        this.actor.apps[this.appId] = this;
+        return super.render(force, options);
+    }
+    async close(options) {
+        await super.close(options);
+        delete this.actor.apps?.[this.appId];
+    }
+    #onAuraChange(event) {
+        event.preventDefault();
+        this.aura = this.auras.findIndex((x)=>x.id === event.currentTarget.value);
+        this.render();
+    }
+    #onRadiusInput(event1) {
+        event1.preventDefault();
+        const radius = event1.currentTarget.value;
+        this.element.find('[name="radius"] + .range-value').text(radius);
+    }
+    #onRadiusChange(event2) {
+        event2.preventDefault();
+        const auraId = this.element.find('[name="aura"]').val();
+        const aura = this.actor.items.get(auraId);
+        if (!aura) return;
+        const rules = aura.system.rules;
+        const rule = rules.find((x)=>x.key === "Aura");
+        if (!rule) return;
+        rule.radius = event2.currentTarget.valueAsNumber;
+        aura.update({
+            "system.rules": rules
+        });
+    }
+}
+
+
+async function $a028de2f1a34aba9$export$cbcb042a99f01f64(actor) {
+    if (!actor || !actor.isOwner) {
+        ui.notifications.warn("You must select a token you own.");
         return;
     }
+    const hasAuras = actor.itemTypes.effect.some((x)=>x.rules.some((y)=>y.key === "Aura"));
+    if (!hasAuras) {
+        ui.notifications.warn("This actor doesn't have any aura.");
+        return;
+    }
+    new (0, $aa7e6be2fa64e428$export$136cd48ea541f110)(actor).render(true);
+}
+
+
+const $8bd910489492050b$var$diverseUUID = "Compendium.pf2e.feats-srd.KlqKpeq5OmTRxVHb";
+function $8bd910489492050b$export$2c0b8334a980c377(actor) {
     const skillKeys = [
         "esoteric",
         "esoteric-lore",
         "lore-esoteric"
     ];
-    const skill = Object.values(actor.system.skills).find((x)=>skillKeys.includes(x.slug));
-    if (!skill) {
-        ui.notifications.warn(`This character doesn't have the 'Esoteric' skill`);
+    const skill = Object.values(actor.skills).find((x)=>skillKeys.includes(x.slug));
+    if (!skill) ui.notifications.warn(`This character doesn't have the 'Esoteric' skill`);
+    return skill;
+}
+function $8bd910489492050b$export$86e270082d81e0cd() {
+    return game.i18n.format("PF2E.SkillCheckWithName", {
+        skillName: "Esoteric"
+    });
+}
+function $8bd910489492050b$export$9c4f14c3d255bec0(actor) {
+    return actor.itemTypes.feat.some((x)=>x.getFlag("core", "sourceId") === $8bd910489492050b$var$diverseUUID);
+}
+
+
+function $98b110c41c431dfd$export$a0fd18cfa913f80d(event, actor) {
+    if (!actor || !actor.isOwner || !actor.isOfType("character")) {
+        ui.notifications.warn("You must select a character token you own.");
         return;
     }
-    const skillName = skill.label;
-    const actionSlug = "action:recall-knowledge";
-    const actionName = game.i18n.localize("PF2E.RecallKnowledge.Label");
-    const DCbyLevel = [
-        14,
-        15,
-        16,
-        18,
-        19,
-        20,
-        22,
-        23,
-        24,
-        26,
-        27,
-        28,
-        30,
-        31,
-        32,
-        34,
-        35,
-        36,
-        38,
-        39,
-        40,
-        42,
-        44,
-        46,
-        48,
-        50
-    ];
-    const targetLevel = target.actor.system.details.level.value;
-    const DC = targetLevel < 0 ? 13 : DCbyLevel[targetLevel];
-    const options = actor.getRollOptions([
-        "all",
-        "skill-check",
-        skillName.toLowerCase()
-    ]);
-    options.push(actionSlug);
-    options.push(`secret`);
-    const dv = /** @type {Array<{type: String, value: number}>} */ target.actor.system.traits.dv;
-    const vulnerability = dv.reduce((prev, curr)=>{
-        if (curr.value > prev) return curr.value;
-        return prev;
-    }, 0);
-    const v = vulnerability ? ` ${vulnerability}` : "";
-    const uuid = "@UUID[Compendium.idleuh.effects.MqgbuaqGMJ92VRze]";
-    const success = game.i18n.localize("PF2E.Check.Result.Degree.Check.success");
-    const failure = game.i18n.localize("PF2E.Check.Result.Degree.Check.failure");
-    const criticalFailure = game.i18n.localize("PF2E.Check.Result.Degree.Check.criticalFailure");
-    let content = `<span class="pf2-icon">A</span> <b>${actionName}</b> - <p class="compact-text">${skillName}</p>`;
-    content += `<p><strong>${success}</strong> ${uuid}{Effect: Exploit Vulnerability${v}}</p>`;
-    content += `<p><strong>${failure}</strong> ${uuid}</p>`;
-    content += `<p><strong>${criticalFailure}</strong> @UUID[Compendium.pf2e.conditionitems.AJh5ex99aV6VTggg]</p>`;
-    game.pf2e.Check.roll(new game.pf2e.CheckModifier(content, skill), {
+    const skill = (0, $8bd910489492050b$export$2c0b8334a980c377)(actor);
+    if (!skill) return;
+    const options = new Set();
+    const title = (0, $8bd910489492050b$export$86e270082d81e0cd)();
+    let flavor = `<h4 class="action">${title}</h4><section class="roll-note">Can be used to Recall Knowledge regarding haunts, curses 
+and creatures of any type, but can't be used to Recall Knowledge of other topics.</section>`;
+    if (event.ctrlKey && (0, $8bd910489492050b$export$9c4f14c3d255bec0)(actor)) {
+        options.add("diverse-lore");
+        flavor += `<section class="roll-note"><strong>Diverse Lore</strong> You can take a -2 penalty to your check to Recall 
+Knowledge about any topic, not just the usual topics available for Esoteric Lore.</section>`;
+    }
+    game.pf2e.Check.roll(new game.pf2e.CheckModifier(flavor, skill), {
         actor: actor,
-        target: {
-            actor: target.actor,
-            token: target.document
-        },
-        title: game.i18n.format("PF2E.SkillCheckWithName", {
-            skillName: skillName
-        }),
+        title: title,
         type: "skill-check",
-        options: options,
-        dc: {
-            value: DC
-        }
+        rollMode: "blindroll",
+        options: options
     }, event);
 }
+
 
 
 
@@ -173,16 +212,8 @@ async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
         ui.notifications.warn("You must select a character token you own and target another one.");
         return;
     }
-    const skillKeys = [
-        "esoteric",
-        "esoteric-lore",
-        "lore-esoteric"
-    ];
-    const skill = Object.values(actor.system.skills).find((x)=>skillKeys.includes(x.slug));
-    if (!skill) {
-        ui.notifications.warn(`This character doesn't have the 'Esoteric' skill`);
-        return;
-    }
+    const skill = (0, $8bd910489492050b$export$2c0b8334a980c377)(actor);
+    if (!skill) return;
     const actionSlug = "action:recall-knowledge";
     const DCbyLevel = [
         14,
@@ -232,9 +263,7 @@ async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
             actor: targetActor,
             token: target.document
         },
-        title: game.i18n.format("PF2E.SkillCheckWithName", {
-            skillName: "Esoteric"
-        }),
+        title: (0, $8bd910489492050b$export$86e270082d81e0cd)(),
         type: "skill-check",
         options: options,
         dc: {
@@ -242,24 +271,23 @@ async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
         },
         createMessage: false
     }, event);
-    const total = roll.total ?? 0;
-    const success = $cd81492382603b02$var$getSuccess(roll, dc);
     const packet = {
         type: "exploit-vulnerability",
         actorId: actor.id,
         targetId: target.id,
+        vulnerability: vulnerability,
         dc: dc,
-        success: success,
-        total: total,
-        vulnerability: vulnerability
+        total: roll.total ?? 0,
+        die: roll.dice[0].total ?? 0
     };
     if (game.user.isGM) $cd81492382603b02$export$430ded1de715a605(packet);
     else (0, $7d0b581a56a65cc7$export$a2c1d094f400f44a)(packet);
 }
-async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , targetId: targetId , success: success , vulnerability: vulnerability , dc: dc , total: total  }) {
+async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , targetId: targetId , vulnerability: vulnerability , dc: dc , total: total , die: die  }) {
     const actor = game.actors.get(actorId);
     const targetActor = canvas.tokens.get(targetId)?.actor;
     if (!actor || !targetActor) return;
+    const success = $cd81492382603b02$var$getSuccess(total, die, dc);
     canvas.tokens.placeables.forEach((token)=>{
         const tokenActor = token.actor;
         if (!tokenActor || tokenActor === actor) return;
@@ -280,57 +308,66 @@ async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , ta
         effect?.delete();
         $cd81492382603b02$var$addFlatFooted(actor);
     }
-    $cd81492382603b02$var$createMsg(actor, targetActor, dc, total, success);
+    $cd81492382603b02$var$createMsg(actor, targetActor, dc, total, die, success);
 }
-function $cd81492382603b02$var$getSuccess(roll, dc) {
-    const total = roll.total;
-    const die = roll.dice[0].total;
+function $cd81492382603b02$var$getSuccess(total, die, dc) {
     let success = total >= dc + 10 ? 3 : total >= dc ? 2 : total > dc - 10 ? 1 : 0;
     if (die === 20) success++;
     else if (die === 1) success--;
     return success;
 }
-function $cd81492382603b02$var$createMsg(actor, target, dc, total, success) {
+function $cd81492382603b02$var$createMsg(actor, target, dc, total, die, success) {
     const by = total - dc;
+    const mod = total - die;
     const css = success >= 3 ? "criticalSuccess" : success === 2 ? "success" : success === 1 ? "failure" : "criticalFailure";
     const txt = success >= 3 ? "Critical Success" : success === 2 ? "Success" : success === 1 ? "Failure" : "Critical Failure";
     let flavor = `<h4 class="action"><span class="pf2-icon">A</span> <b>Exploit Vulnerability</b> <p class="compact-text">(Esoteric Check)</p></h4>
 <div class="target-dc-result" data-visibility="gm">
     <div class="target-dc" data-visibility="gm"><span data-visibility="gm" data-whose="target">
         Target: ${target.name}</span> <span data-visibility="gm" data-whose="target">(Standard DC ${dc})</span></div>
-    <div class="result degree-of-success" data-visibility="gm">Result: 
+    <div class="result degree-of-success" data-visibility="gm">
+        Result: <span title="Roll: ${die} ${mod >= 0 ? "+" : "-"} ${Math.abs(mod)}">${total}</span> 
         <span data-whose="self" class="${css}">${txt}</span> <span data-whose="target">by ${by >= 0 ? "+" : ""}${by}</span>
     </div>
 </div>`;
-    if (success >= 3) flavor += `<section class="roll-note">
-    <strong>Critical Success</strong> You remember the creature's weaknesses, and as you empower your esoterica, 
-    you have a flash of insight that grants even more knowledge about the creature. 
-    You learn all of the creature's resistances, weaknesses, and immunities, 
-    including the amounts of the resistances and weaknesses and any unusual weaknesses or vulnerabilities, 
-    such as what spells will pass through a golem's antimagic. 
-    You can exploit either the creature's mortal weakness or personal antithesis (see the Exploit Vulnerability class feature). 
-    Your unarmed and weapon Strikes against the creature also become magical if they weren't already.
-</section>`;
-    else if (success === 2) flavor += `<section class="roll-note">
-    <strong>Success</strong> You recall an important fact about the creature, 
-    learning its highest weakness (or one of its highest weaknesses, if it has multiple with the same value) but not its other weaknesses, 
-    resistances, or immunities. You can exploit either the creature's mortal weakness or personal antithesis. 
-    Your unarmed and weapon Strikes against the creature also become magical if they weren't already.
-</section>`;
-    else if (success === 1) flavor += `<section class="roll-note">
-    <strong>Failure</strong> Failing to recall a salient weakness about the creature, 
-    you instead attempt to exploit a more personal vulnerability. 
-    You can exploit only the creature's personal antithesis. 
-    Your unarmed and weapon Strikes against the creature also become magical if they weren't already.
-</section>`;
-    else flavor += `<section class="roll-note">
-<strong>Critical Failure</strong> You couldn't remember the right object to use and become distracted while you rummage through your esoterica. 
-You become flat-footed until the beginning of your next turn.
-</section>`;
+    flavor += '<section class="roll-note">';
+    if (success >= 3) flavor += `<strong>Critical Success</strong> You remember the creature's weaknesses, and as you empower your esoterica, 
+you have a flash of insight that grants even more knowledge about the creature. 
+You learn all of the creature's resistances, weaknesses, and immunities, 
+including the amounts of the resistances and weaknesses and any unusual weaknesses or vulnerabilities, 
+such as what spells will pass through a golem's antimagic. 
+You can exploit either the creature's mortal weakness or personal antithesis (see the Exploit Vulnerability class feature). 
+Your unarmed and weapon Strikes against the creature also become magical if they weren't already.`;
+    else if (success === 2) flavor += `<strong>Success</strong> You recall an important fact about the creature, 
+learning its highest weakness (or one of its highest weaknesses, if it has multiple with the same value) but not its other weaknesses, 
+resistances, or immunities. You can exploit either the creature's mortal weakness or personal antithesis. 
+Your unarmed and weapon Strikes against the creature also become magical if they weren't already.`;
+    else if (success === 1) flavor += `<strong>Failure</strong> Failing to recall a salient weakness about the creature, 
+you instead attempt to exploit a more personal vulnerability. 
+You can exploit only the creature's personal antithesis. 
+Your unarmed and weapon Strikes against the creature also become magical if they weren't already.`;
+    else flavor += `<strong>Critical Failure</strong> You couldn't remember the right object to use and become distracted while you rummage 
+through your esoterica. You become flat-footed until the beginning of your next turn.`;
+    flavor += "</section>";
+    if ((0, $8bd910489492050b$export$9c4f14c3d255bec0)(actor) && success >= 2) flavor += $cd81492382603b02$var$getDiverseLoreMsg(target, total, die);
     ChatMessage.create({
         flavor: flavor,
         actor: actor
     });
+}
+function $cd81492382603b02$var$getDiverseLoreMsg(target, total, die) {
+    const progression = target.system.details.identification?.skill.progression ?? [];
+    const knowledges = progression.map((dc)=>{
+        const success = $cd81492382603b02$var$getSuccess(total, die, dc);
+        const color = success >= 3 ? "green" : success === 2 ? "blue" : "#ff4500";
+        const title = success >= 3 ? "Critical Success" : success === 2 ? "Success" : "Failure";
+        return `<span style="color: ${color};" title="${title}">${dc}</span>`;
+    });
+    const dcs = knowledges.length ? ` <span data-visibility="gm">${knowledges.join(", ")}</span>` : "";
+    return `<section class="roll-note">
+    <strong>Diverse Lore</strong> Compare the result of your Esoteric Lore check to the DC${dcs} to Recall Knowledge for that creature; 
+    if that number would be a success or a critical success, you gain information as if you had succeeded at the Recall Knowledge check.
+</section>`;
 }
 function $cd81492382603b02$var$getEffect(actor) {
     return actor.itemTypes.effect.find((effect)=>effect.getFlag("core", "sourceId") === $cd81492382603b02$var$effectID);
@@ -730,7 +767,7 @@ async function $4d5f7ddf43e0f7d9$export$8336e602fcba102(actor) {
             "system.category.value"
         ]
     });
-    const spells = index.filter((x)=>x.system.level.value === level && !x.system.traits.value.includes("cantrip") && x.system.category.value !== "ritual" && x.system.category.value !== "focus" && x.system.traits.rarity === "common");
+    const spells = index.filter((x)=>x.system.level.value <= level && !x.system.traits.value.includes("cantrip") && x.system.category.value !== "ritual" && x.system.category.value !== "focus" && x.system.traits.rarity === "common");
     const roll = Math.floor(Math.random() * spells.length);
     const spell = spells[roll];
     const uuid = `Compendium.${$4d5f7ddf43e0f7d9$var$packId}.${spell._id}`;
@@ -899,12 +936,13 @@ function $23d7d704d6e2c579$var$setDebuff(firstToken, firstDebuff) {
 Hooks.once("init", ()=>{
     (0, $f13521bdeed07ab3$export$afac0fc6c5fe0d6)().api = {
         macros: {
-            esotericCheck: $9a0b513b0704079f$export$a0fd18cfa913f80d,
             exploitVulnerability: $cd81492382603b02$export$22e7686aa871dc22,
+            esotericCheck: $98b110c41c431dfd$export$a0fd18cfa913f80d,
             manualToken: $dcd79b6d4f0a91cd$export$918e4924dfc1c5e7,
             groupPerception: $3f81a3961091a2a4$export$2d5babad0c808e82,
             identify: $2e8e7adddb97c14f$export$65e5b62a4c490288,
-            ripImaginarium: $4d5f7ddf43e0f7d9$export$8336e602fcba102
+            ripImaginarium: $4d5f7ddf43e0f7d9$export$8336e602fcba102,
+            auraRadius: $a028de2f1a34aba9$export$cbcb042a99f01f64
         }
     };
     game.settings.register((0, $1623e5e7c705b7c7$export$2e2bcd8739ae039), "bff", {

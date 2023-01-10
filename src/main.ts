@@ -1,7 +1,8 @@
 import { getCurrentModule } from './@utils/foundry/module'
 import { getSetting } from './@utils/foundry/settings'
 import { socketOn } from './@utils/socket'
-import { esotericCheck } from './macros/esoteric'
+import { auraRadius } from './macros/aura-radius'
+import { esotericCheck } from './macros/esoteric-check'
 import { exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
@@ -13,12 +14,13 @@ import { enableBFF } from './modules/bff'
 Hooks.once('init', () => {
     getCurrentModule().api = {
         macros: {
-            esotericCheck,
             exploitVulnerability,
+            esotericCheck,
             manualToken,
             groupPerception,
             identify,
             ripImaginarium,
+            auraRadius,
         },
     }
 
