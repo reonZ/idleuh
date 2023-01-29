@@ -257,6 +257,7 @@ async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
         if (curr.value > prev) return curr.value;
         return prev;
     }, 0);
+    const weaknesses = dv.filter((x)=>x.value === vulnerability).map((x)=>x.type);
     const roll = await game.pf2e.Check.roll(new game.pf2e.CheckModifier("test", skill), {
         actor: actor,
         target: {
@@ -276,6 +277,7 @@ async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
         actorId: actor.id,
         targetId: target.id,
         vulnerability: vulnerability,
+        weaknesses: weaknesses,
         dc: dc,
         total: roll.total ?? 0,
         die: roll.dice[0].total ?? 0
@@ -283,7 +285,7 @@ async function $cd81492382603b02$export$22e7686aa871dc22(event, actor) {
     if (game.user.isGM) $cd81492382603b02$export$430ded1de715a605(packet);
     else (0, $7d0b581a56a65cc7$export$a2c1d094f400f44a)(packet);
 }
-async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , targetId: targetId , vulnerability: vulnerability , dc: dc , total: total , die: die  }) {
+async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , targetId: targetId , vulnerability: vulnerability , weaknesses: weaknesses , dc: dc , total: total , die: die  }) {
     const actor = game.actors.get(actorId);
     const targetActor = canvas.tokens.get(targetId)?.actor;
     if (!actor || !targetActor) return;
@@ -308,7 +310,7 @@ async function $cd81492382603b02$export$430ded1de715a605({ actorId: actorId , ta
         effect?.delete();
         $cd81492382603b02$var$addFlatFooted(actor);
     }
-    $cd81492382603b02$var$createMsg(actor, targetActor, dc, total, die, success);
+    $cd81492382603b02$var$createMsg(actor, targetActor, dc, total, die, success, vulnerability, weaknesses);
 }
 function $cd81492382603b02$var$getSuccess(total, die, dc) {
     let success = total >= dc + 10 ? 3 : total >= dc ? 2 : total > dc - 10 ? 1 : 0;
@@ -316,7 +318,7 @@ function $cd81492382603b02$var$getSuccess(total, die, dc) {
     else if (die === 1) success--;
     return success;
 }
-function $cd81492382603b02$var$createMsg(actor, target, dc, total, die, success) {
+function $cd81492382603b02$var$createMsg(actor, target, dc, total, die, success, vulnerability, weaknesses) {
     const by = total - dc;
     const mod = total - die;
     const css = success >= 3 ? "criticalSuccess" : success === 2 ? "success" : success === 1 ? "failure" : "criticalFailure";
@@ -330,6 +332,7 @@ function $cd81492382603b02$var$createMsg(actor, target, dc, total, die, success)
         <span data-whose="self" class="${css}">${txt}</span> <span data-whose="target">by ${by >= 0 ? "+" : ""}${by}</span>
     </div>
 </div>`;
+    if (success >= 2 && weaknesses.length) flavor += `<div><strong>[ ${weaknesses.join(", ")} ]</strong> = ${vulnerability}</div>`;
     flavor += '<section class="roll-note">';
     if (success >= 3) flavor += `<strong>Critical Success</strong> You remember the creature's weaknesses, and as you empower your esoterica, 
 you have a flash of insight that grants even more knowledge about the creature. 

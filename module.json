@@ -30,18 +30,11 @@
     },
     "packs": [
         {
-            "name": "actors",
-            "label": "Idleuh (players)",
+            "name": "actions",
+            "label": "Idleuh (actions)",
             "system": "pf2e",
-            "path": "packs/idleuh-actors.db",
-            "type": "Actor"
-        },
-        {
-            "name": "summons",
-            "label": "Idleuh (summons)",
-            "system": "pf2e",
-            "path": "packs/idleuh-summons.db",
-            "type": "Actor"
+            "path": "packs/idleuh-actions.db",
+            "type": "Item"
         },
         {
             "name": "effects",
@@ -51,10 +44,10 @@
             "type": "Item"
         },
         {
-            "name": "actions",
-            "label": "Idleuh (actions)",
+            "name": "equipment",
+            "label": "Idleuh (equipment)",
             "system": "pf2e",
-            "path": "packs/idleuh-actions.db",
+            "path": "packs/idleuh-equipment.db",
             "type": "Item"
         },
         {
@@ -62,13 +55,6 @@
             "label": "Idleuh (feats)",
             "system": "pf2e",
             "path": "packs/idleuh-feats.db",
-            "type": "Item"
-        },
-        {
-            "name": "equipment",
-            "label": "Idleuh (equipment)",
-            "system": "pf2e",
-            "path": "packs/idleuh-equipment.db",
             "type": "Item"
         },
         {
@@ -84,32 +70,18 @@
             "system": "pf2e",
             "path": "packs/idleuh-players-macros.db",
             "type": "Macro"
-        },
-        {
-            "name": "scripts-macros",
-            "label": "Idleuh (scripts macros)",
-            "system": "pf2e",
-            "path": "packs/idleuh-scripts-macros.db",
-            "type": "Macro"
-        },
-        {
-            "name": "tables",
-            "label": "Idleuh (tables)",
-            "system": "pf2e",
-            "path": "packs/idleuh-tables.db",
-            "type": "RollTable"
         }
     ],
     "compatibility": {
         "minimum": "10.290",
         "verified": "10"
     },
-    "version": "1.5.0",
+    "version": "1.6.0",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.5.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.6.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/releases",
     "bugs": "https://github.com/reonZ/idleuh/issues"
 }

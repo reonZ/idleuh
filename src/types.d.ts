@@ -3,6 +3,7 @@ interface ExploitVulnerabilityPacket extends SocketPacket {
     actorId: string
     targetId: string
     vulnerability: number
+    weaknesses: string[]
     dc: number
     total: number
     die: number
