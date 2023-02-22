@@ -1,1 +1,5 @@
-# FoundryVTT Trucs pour Corsaire
+# FoundryVTT Idleuh
+
+# CHANGELOG
+
+You can see the changelog [HERE](./CHANGELOG.md)

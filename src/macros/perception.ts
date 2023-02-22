@@ -8,7 +8,7 @@ export async function groupPerception() {
 
     let result = '<hr>'
 
-    const tokens = canvas.tokens as TokenLayerPF2e
+    const tokens = canvas.tokens
     for (const token of tokens.placeables) {
         const actor = token.actor
         if (!actor || !actor.isOfType('character', 'npc') || !actor.hasPlayerOwner || !actor.attributes.perception) continue

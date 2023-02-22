@@ -1,6 +1,6 @@
-import { templatePath } from '~src/@utils/foundry/path'
+import { templatePath } from '@utils/foundry/path'
 
-export class IdleuhManualTokenApp extends FormApplication<TokenDocumentPF2e> {
+export class ManualToken extends FormApplication<TokenDocumentPF2e> {
     static get defaultOptions(): FormApplicationOptions {
         return mergeObject(super.defaultOptions, {
             id: 'idleuh-manual-token',

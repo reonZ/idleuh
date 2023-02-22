@@ -1,4 +1,4 @@
-import { getSetting } from '~src/@utils/foundry/settings'
+import { getSetting } from '@utils/foundry/settings'
 
 const effectId = 'Item.pFguo7KVVjFMqHhe'
 
@@ -23,7 +23,7 @@ function setDebuff(firstToken: TokenDocument, firstDebuff: EffectPF2e) {
     let otherToken
     let otherDebuff
 
-    const tokens = canvas.tokens.placeables as TokenPF2e[]
+    const tokens = canvas.tokens.placeables
     for (const token of tokens) {
         const otherActor = token.actor
         if (!otherActor || otherActor === firstToken.actor) continue

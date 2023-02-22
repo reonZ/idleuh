@@ -1,8 +1,8 @@
-import { templatePath } from '~src/@utils/foundry/path'
-import { objectHasKey } from '~src/@utils/object'
-import { identifyItem } from '~src/@utils/pf2e'
+import { templatePath } from '@utils/foundry/path'
+import { identifyItem } from '@utils/pf2e/item'
+import { SKILL_ABBREVIATIONS, SKILL_DICTIONARY } from '@utils/pf2e/skills'
 
-export class IdleuhIdentifyApp extends Application {
+export class Identify extends Application {
     items: PhysicalItemPF2e[]
 
     constructor(items: PhysicalItemPF2e[], options?: Partial<ApplicationOptions>) {
@@ -69,13 +69,11 @@ export class IdleuhIdentifyApp extends Application {
         const proficiencyWithoutLevel = game.settings.get('pf2e', 'proficiencyVariant') === 'ProficiencyWithoutLevel'
         const dcs = identifyItem(item, { proficiencyWithoutLevel, notMatchingTraditionModifier })
 
-        const skills = Object.entries(dcs)
-            .filter(([shortForm, dc]) => Number.isInteger(dc) && objectHasKey(CONFIG.PF2E.skills, shortForm))
-            .map(([shortForm, dc]) => ({
-                shortForm,
-                dc,
-                name: game.i18n.localize(CONFIG.PF2E.skills[shortForm as keyof typeof CONFIG.PF2E.skills]),
-            }))
+        const skills = Object.entries(dcs).map(([shortForm, dc]) => {
+            shortForm = shortForm === 'dc' ? 'cra' : shortForm
+            const name = game.i18n.localize(SKILL_DICTIONARY[shortForm as SkillAbbreviation])
+            return { shortForm, dc, name }
+        })
 
         const content = await renderTemplate('systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs', {
             itemImg,

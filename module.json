@@ -9,13 +9,25 @@
             "discord": "Idle#3251"
         }
     ],
-    "socket": true,
-    "styles": [
-        "styles/styles.css"
-    ],
     "esmodules": [
         "scripts/main.js"
     ],
+    "compatibility": {
+        "minimum": "10.291",
+        "verified": "10"
+    },
+    "version": "1.7.0",
+    "manifestPlusVersion": "1.2.0",
+    "url": "https://github.com/reonZ/idleuh",
+    "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
+    "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.7.0/module.zip",
+    "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
+    "bugs": "https://github.com/reonZ/idleuh/issues",
+    "styles": [
+        "styles/styles.css"
+    ],
+    "socket": true,
     "relationships": {
         "systems": [
             {
@@ -23,7 +35,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "4.4.1"
+                    "minimum": "4.6.8"
                 }
             }
         ]
@@ -71,17 +83,5 @@
             "path": "packs/idleuh-players-macros.db",
             "type": "Macro"
         }
-    ],
-    "compatibility": {
-        "minimum": "10.290",
-        "verified": "10"
-    },
-    "version": "1.6.0",
-    "manifestPlusVersion": "1.2.0",
-    "url": "https://github.com/reonZ/idleuh",
-    "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
-    "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.6.0/module.zip",
-    "changelog": "https://github.com/reonZ/idleuh/releases",
-    "bugs": "https://github.com/reonZ/idleuh/issues"
+    ]
 }

@@ -1,18 +1,19 @@
-import { getCurrentModule } from './@utils/foundry/module'
-import { getSetting } from './@utils/foundry/settings'
-import { socketOn } from './@utils/socket'
-import { auraRadius } from './macros/aura-radius'
-import { esotericCheck } from './macros/esoteric-check'
+import { MODULE_ID, setModuleID } from '@utils/module'
+import { socketOn } from '@utils/socket'
+import { getCurrentModule } from '@utils/foundry/module'
+import { getSetting } from '@utils/foundry/settings'
+import { enableBFF } from './modules/bff'
 import { exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
+import { esotericCheck } from './macros/esoteric'
+import { manualToken } from './macros/manual-token'
+import { groupPerception } from './macros/perception'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
-import { manualToken } from './macros/manual'
-import { groupPerception } from './macros/perception'
-import MODULE_ID from './module'
-import { enableBFF } from './modules/bff'
+
+setModuleID('idleuh')
 
 Hooks.once('init', () => {
-    getCurrentModule().api = {
+    getCurrentModule<IdleuhApi>().api = {
         macros: {
             exploitVulnerability,
             esotericCheck,
@@ -20,7 +21,6 @@ Hooks.once('init', () => {
             groupPerception,
             identify,
             ripImaginarium,
-            auraRadius,
         },
     }
 
@@ -47,10 +47,10 @@ Hooks.once('init', () => {
 Hooks.once('ready', () => {
     if (getSetting('bff')) enableBFF(true)
     if (game.user.isGM) {
-        socketOn(onSocket)
+        socketOn(onPacketReceived)
     }
 })
 
-function onSocket(packet: Packet) {
+function onPacketReceived(packet: ModulePacket) {
     if (packet.type === 'exploit-vulnerability') exploitVulnerabilityGM(packet)
 }
