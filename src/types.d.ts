@@ -7,10 +7,11 @@ interface ExploitVulnerabilityPacket extends SocketPacket {
     actorId: string
     targetId: string
     vulnerability: number
-    weaknesses: string[]
-    dc: number
-    total: number
-    die: number
+    success: number
+}
+
+interface CleanExploitVulnerabilityPacket extends SocketPacket {
+    type: 'clean-exploit-vulnerability'
 }
 
 type ModulePacket = ExploitVulnerabilityPacket

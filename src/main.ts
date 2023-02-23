@@ -2,7 +2,7 @@ import { getCurrentModule } from '@utils/foundry/module'
 import { setModuleID } from '@utils/module'
 import { socketOn } from '@utils/socket'
 import { esotericCheck } from './macros/esoteric'
-import { exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
+import { cleanExploitVulnerabilityGM, exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
 import { manualToken } from './macros/manual-token'
@@ -51,4 +51,5 @@ Hooks.once('ready', () => {
 
 function onPacketReceived(packet: ModulePacket) {
     if (packet.type === 'exploit-vulnerability') exploitVulnerabilityGM(packet)
+    else if (packet.type === 'clean-exploit-vulnerability') cleanExploitVulnerabilityGM()
 }
