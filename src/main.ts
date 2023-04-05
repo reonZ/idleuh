@@ -1,6 +1,7 @@
 import { getCurrentModule } from '@utils/foundry/module'
 import { setModuleID } from '@utils/module'
 import { socketOn } from '@utils/socket'
+import { getSetting } from '@utils/foundry/settings'
 import { esotericCheck } from './macros/esoteric'
 import { cleanExploitVulnerabilityGM, exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
 import { identify } from './macros/identify'
@@ -8,7 +9,8 @@ import { ripImaginarium } from './macros/imaginarium'
 import { manualToken } from './macros/manual-token'
 import { groupPerception } from './macros/perception'
 
-setModuleID('idleuh')
+const MODULE_ID = 'idleuh'
+setModuleID(MODULE_ID)
 
 Hooks.once('init', () => {
     getCurrentModule<IdleuhApi>().api = {
@@ -22,32 +24,28 @@ Hooks.once('init', () => {
         },
     }
 
-    // game.settings.register(MODULE_ID, 'bff', {
-    //     name: "Enable BFF's Ire",
-    //     hint: "Should the BFF's Ire be handled.",
-    //     type: Boolean,
-    //     default: true,
-    //     config: true,
-    //     scope: 'world',
-    //     onChange: enableBFF,
-    // })
-
-    // game.settings.register(MODULE_ID, 'bffDistance', {
-    //     name: "BFF's Ire Distance",
-    //     hint: 'Distance in square(s) for the curse to apply.',
-    //     type: Number,
-    //     default: 1,
-    //     config: true,
-    //     scope: 'world',
-    // })
+    game.settings.register(MODULE_ID, 'jquery', {
+        name: 'Disable JQuery Animations',
+        hint: 'Will cancel sliding animations on different parts of the UI.',
+        type: Boolean,
+        default: false,
+        config: true,
+        scope: 'client',
+        onChange: setJQueryFx,
+    })
 })
 
 Hooks.once('ready', () => {
-    // if (getSetting('bff')) enableBFF(true)
     if (game.user.isGM) {
         socketOn(onPacketReceived)
     }
+
+    if (getSetting('jquery')) setJQueryFx(true)
 })
+
+function setJQueryFx(disabled: boolean) {
+    jQuery.fx.off = disabled
+}
 
 function onPacketReceived(packet: ModulePacket) {
     if (packet.type === 'exploit-vulnerability') exploitVulnerabilityGM(packet)

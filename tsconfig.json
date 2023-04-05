@@ -23,5 +23,5 @@
         }
     },
 
-    "include": ["src/**/*", "D:/foundryVTT-projects/@utils/**/*", "D:/foundryVTT-projects/@types/**/*"]
+    "include": ["src/**/*", "D:/foundryVTT-projects/@utils/**/*", "D:/foundryVTT-projects/@types/**/*", "D:/foundryVTT-projects/@pf2e/**/*"]
 }
