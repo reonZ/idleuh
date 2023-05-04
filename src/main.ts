@@ -8,6 +8,7 @@ import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
 import { manualToken } from './macros/manual-token'
 import { groupPerception } from './macros/perception'
+import { marshalInspiration } from './macros/inspiring-marshal'
 
 const MODULE_ID = 'idleuh'
 setModuleID(MODULE_ID)
@@ -21,6 +22,7 @@ Hooks.once('init', () => {
             groupPerception,
             identify,
             ripImaginarium,
+            marshalInspiration,
         },
     }
 

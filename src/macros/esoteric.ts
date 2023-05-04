@@ -22,15 +22,11 @@ and creatures of any type, but can't be used to Recall Knowledge of other topics
 Knowledge about any topic, not just the usual topics available for Esoteric Lore.</section>`
     }
 
-    game.pf2e.Check.roll(
-        new game.pf2e.CheckModifier(flavor, skill),
-        {
-            actor,
-            title,
-            type: 'skill-check',
-            rollMode: 'blindroll',
-            options,
-        },
-        event
-    )
+    game.pf2e.Check.roll(new game.pf2e.CheckModifier(flavor, skill), {
+        actor,
+        title,
+        type: 'skill-check',
+        rollMode: 'blindroll',
+        options,
+    })
 }
