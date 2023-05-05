@@ -1,12 +1,23 @@
-import { getDcByLevel } from '@utils/pf2e/dc'
 import { findItemWithSourceId } from '@utils/foundry/item'
-import { getChoiSetRuleSelection } from '@utils/pf2e/item'
+import { getDcByLevel } from '@utils/pf2e/dc'
 
 const effectUUID = 'Compendium.idleuh.effects.jjFsfolNR04KzPVh'
+const featUUID = 'Compendium.idleuh.feats.X3SZ0gTpBkGw3UGX'
+const debuffUUID = 'Compendium.idleuh.effects.r0hicuQPY0OEAC6g'
 
 export async function marshalInspiration(event: JQuery.TriggeredEvent, actor: ActorPF2e) {
     if (!actor || !actor.isOwner || !actor.isOfType('character')) {
         ui.notifications.warn('You must select a character token you own.')
+        return
+    }
+
+    if (!findItemWithSourceId(actor as Actor, featUUID, ['feat'])) {
+        ui.notifications.warn("This character doesn't have <strong>Inspiring Marshal Stance</strong> feat.")
+        return
+    }
+
+    if (findItemWithSourceId(actor as Actor, debuffUUID, ['effect'])) {
+        ui.notifications.warn('This character cannot enter <strong>Inspiring Marshal Stance</strong>.')
         return
     }
 
@@ -16,8 +27,12 @@ export async function marshalInspiration(event: JQuery.TriggeredEvent, actor: Ac
     const die = roll.dice[0]!.total!
     const success = getSuccess(result, die, dc)
 
-    if (success >= 2) await setEffect(actor, success)
-    else await (await getEffect(actor))?.delete()
+    if (success >= 2) {
+        await setEffect(actor, success)
+    } else {
+        await (await getEffect(actor))?.delete()
+        if (success === 0) await setDebuff(actor)
+    }
 
     createMsg(actor as Actor, success, result, die, dc)
 }
@@ -63,6 +78,12 @@ function getSuccess(result: number, die: number, dc: number) {
     return Math.clamped(success, 0, 3)
 }
 
+async function setDebuff(actor: CharacterPF2e) {
+    const effect = await fromUuid<EffectPF2e>(debuffUUID)
+    if (!effect) return
+    await actor.createEmbeddedDocuments('Item', [effect.toObject()])
+}
+
 async function setEffect(actor: CharacterPF2e, success: number) {
     const radius = success === 3 ? 20 : 10
     const existing = await getEffect(actor)
@@ -88,5 +109,5 @@ async function setEffect(actor: CharacterPF2e, success: number) {
 }
 
 async function getEffect(actor: CharacterPF2e) {
-    return findItemWithSourceId(actor as Actor, effectUUID) as EffectPF2e | undefined
+    return findItemWithSourceId(actor as Actor, effectUUID, ['effect']) as EffectPF2e | undefined
 }
