@@ -47,7 +47,7 @@ function createMsg(actor: Actor, success: number, result: number, die: number, d
     <div class="target-dc-result">
         <div class="target-dc"><span data-whose="target">Standard DC ${dc}</span></div>
         <div class="result degree-of-success">
-            Result: <span title="Roll: ${result} ${mod >= 0 ? '+' : '-'} ${Math.abs(mod)}">${result}</span> 
+            Result: <span title="Roll: ${die} ${mod >= 0 ? '+' : '-'} ${Math.abs(mod)}">${result}</span> 
             <span data-whose="self" class="${css}">${txt}</span> <span data-whose="target">by ${by >= 0 ? '+' : ''}${by}</span>
         </div>
     </div>`
