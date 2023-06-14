@@ -1,4 +1,4 @@
-const diverseUUID = 'Compendium.pf2e.feats-srd.KlqKpeq5OmTRxVHb'
+const diverseUUID = 'Compendium.pf2e.feats-srd.Item.KlqKpeq5OmTRxVHb'
 
 export function getEsotericSkill(actor: CharacterPF2e) {
     const skillKeys = ['esoteric', 'esoteric-lore', 'lore-esoteric']

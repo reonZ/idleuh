@@ -1,9 +1,9 @@
 import { findItemWithSourceId } from '@utils/foundry/item'
 import { getDcByLevel } from '@utils/pf2e/dc'
 
-const effectUUID = 'Compendium.idleuh.effects.jjFsfolNR04KzPVh'
-const featUUID = 'Compendium.idleuh.feats.X3SZ0gTpBkGw3UGX'
-const debuffUUID = 'Compendium.idleuh.effects.r0hicuQPY0OEAC6g'
+const effectUUID = 'Compendium.idleuh.effects.Item.jjFsfolNR04KzPVh'
+const featUUID = 'Compendium.idleuh.feats.Item.X3SZ0gTpBkGw3UGX'
+const debuffUUID = 'Compendium.idleuh.effects.Item.r0hicuQPY0OEAC6g'
 
 export async function marshalInspiration(event: JQuery.TriggeredEvent, actor: ActorPF2e) {
     if (!actor || !actor.isOwner || !actor.isOfType('character')) {
