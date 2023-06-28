@@ -1,6 +1,7 @@
 import { templatePath } from '@utils/foundry/path'
 import { identifyItem } from '@utils/pf2e/item'
 import { SKILL_ABBREVIATIONS, SKILL_DICTIONARY } from '@utils/pf2e/skills'
+import { getItemIdentificationDCs } from '@utils/pf2e/dc'
 
 export class Identify extends Application {
     items: PhysicalItemPF2e[]
@@ -65,36 +66,32 @@ export class Identify extends Application {
         const itemName = item.system.identification.unidentified.name
         const identifiedName = item.system.identification.identified.name
 
-        const notMatchingTraditionModifier = game.settings.get('pf2e', 'identifyMagicNotMatchingTraditionModifier') as number
+        const notMatchingTraditionModifier = game.settings.get('pf2e', 'identifyMagicNotMatchingTraditionModifier')
         const proficiencyWithoutLevel = game.settings.get('pf2e', 'proficiencyVariant') === 'ProficiencyWithoutLevel'
-        const dcs = identifyItem(item, { proficiencyWithoutLevel, notMatchingTraditionModifier })
+        const dcs = getItemIdentificationDCs(item, { proficiencyWithoutLevel, notMatchingTraditionModifier })
 
-        const skills = Object.entries(dcs).map(([shortForm, dc]) => {
-            shortForm = shortForm === 'dc' ? 'cra' : shortForm
-            const name = game.i18n.localize(SKILL_DICTIONARY[shortForm as SkillAbbreviation])
-            return { shortForm, dc, name }
+        const skills = Object.entries(dcs).map(([slug, dc]) => {
+            const name = game.i18n.localize(CONFIG.PF2E.skillList[slug])
+            return { slug, name, dc }
         })
+
+        const actionOption = item.isMagical ? 'action:identify-magic' : item.isAlchemical ? 'action:identify-alchemy' : null
 
         const content = await renderTemplate('systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs', {
             itemImg,
             itemName,
             identifiedName,
+            rollOptions: ['concentrate', 'exploration', 'secret', actionOption].filter(Boolean),
             skills,
         })
 
-        await ChatMessage.create({ user: game.user.id, content })
+        await CONFIG.ChatMessage.documentClass.create({ user: game.user.id, content })
     }
 
     async #onIdentify(event: JQuery.ClickEvent<any, any, HTMLElement>) {
         const item = await getItemFromEvent(event)
         if (!item) return
-
-        await item.update({
-            'system.identification.status': item.isIdentified ? 'unidentified' : 'identified',
-            'system.identification.unidentified': item.getMystifiedData('unidentified'),
-            'flags.world.identify.checked': false,
-        })
-
+        await item.setIdentificationStatus(item.isIdentified ? 'unidentified' : 'identified')
         this.render()
     }
 
