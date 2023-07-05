@@ -71,6 +71,7 @@ export class Identify extends Application {
         const dcs = getItemIdentificationDCs(item, { proficiencyWithoutLevel, notMatchingTraditionModifier })
 
         const skills = Object.entries(dcs).map(([slug, dc]) => {
+            slug = slug === 'dc' ? 'crafting' : slug
             const name = game.i18n.localize(CONFIG.PF2E.skillList[slug])
             return { slug, name, dc }
         })
