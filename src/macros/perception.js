@@ -18,7 +18,7 @@ export async function groupPerception() {
     ChatMessage.create({ content: result, flavor: 'Group Perception Checks', whisper: [game.user.id] })
 }
 
-async function rollPerception(actor: CharacterPF2e | NPCPF2e) {
+async function rollPerception(actor) {
     const perception = actor.attributes.perception
     const check = new game.pf2e.CheckModifier('', perception)
     const roll = await game.pf2e.Check.roll(check, { actor: actor, type: 'skill-check', createMessage: false, skipDialog: true })

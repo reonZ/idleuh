@@ -1,24 +1,16 @@
-import { getCurrentModule } from '@utils/foundry/module'
-import { setModuleID } from '@utils/module'
-import { socketOn } from '@utils/socket'
-import { getSetting } from '@utils/foundry/settings'
 import { esotericCheck } from './macros/esoteric'
-import { cleanExploitVulnerabilityGM, exploitVulnerability, exploitVulnerabilityGM } from './macros/exploit-vulnerability'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
-import { manualToken } from './macros/manual-token'
+import { marshalInspiration } from './macros/marshal'
 import { groupPerception } from './macros/perception'
-import { marshalInspiration } from './macros/inspiring-marshal'
-
-const MODULE_ID = 'idleuh'
-setModuleID(MODULE_ID)
+import { cleanExploitVulnerabilityGM, exploitVulnerability, exploitVulnerabilityGM } from './macros/vulnerability'
+import { MODULE_ID, getSetting, socketOn } from './module'
 
 Hooks.once('init', () => {
-    getCurrentModule<IdleuhApi>().api = {
+    game.modules.get(MODULE_ID).api = {
         macros: {
             exploitVulnerability,
             esotericCheck,
-            manualToken,
             groupPerception,
             identify,
             ripImaginarium,
@@ -45,11 +37,11 @@ Hooks.once('ready', () => {
     if (getSetting('jquery')) setJQueryFx(true)
 })
 
-function setJQueryFx(disabled: boolean) {
+function setJQueryFx(disabled) {
     jQuery.fx.off = disabled
 }
 
-function onPacketReceived(packet: ModulePacket) {
+function onPacketReceived(packet) {
     if (packet.type === 'exploit-vulnerability') exploitVulnerabilityGM(packet)
     else if (packet.type === 'clean-exploit-vulnerability') cleanExploitVulnerabilityGM()
 }

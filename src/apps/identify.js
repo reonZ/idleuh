@@ -1,12 +1,8 @@
-import { templatePath } from '@utils/foundry/path'
-import { identifyItem } from '@utils/pf2e/item'
-import { SKILL_ABBREVIATIONS, SKILL_DICTIONARY } from '@utils/pf2e/skills'
-import { getItemIdentificationDCs } from '@utils/pf2e/dc'
+import { templatePath } from '../module'
+import { getItemIdentificationDCs } from '../pf2e'
 
 export class Identify extends Application {
-    items: PhysicalItemPF2e[]
-
-    constructor(items: PhysicalItemPF2e[], options?: Partial<ApplicationOptions>) {
+    constructor(items, options) {
         super(options)
         this.items = items
     }
@@ -20,14 +16,14 @@ export class Identify extends Application {
         })
     }
 
-    getData(options?: Partial<ApplicationOptions> | undefined) {
+    getData(options) {
         return mergeObject(super.getData(options), {
             items: this.items.map(item => {
                 const data = item.system.identification.identified
                 const identified = item.isIdentified
-                const checked = !identified && (item.getFlag('world', 'identify.checked') as boolean)
+                const checked = !identified && item.getFlag('world', 'identify.checked')
 
-                const classes = [] as string[]
+                const classes = []
                 if (identified) classes.push('identified')
                 if (checked) classes.push('checked')
 
@@ -43,9 +39,7 @@ export class Identify extends Application {
         })
     }
 
-    activateListeners(html: JQuery<HTMLElement>) {
-        // super.activateListeners(html)
-
+    activateListeners(html) {
         html.find('[data-action="chat"]').on('click', this.#onChat.bind(this))
         html.find('[data-action="checks"]').on('click', this.#onChecks.bind(this))
         html.find('[data-action="identify"]').on('click', this.#onIdentify.bind(this))
@@ -53,12 +47,12 @@ export class Identify extends Application {
         html.find('[data-action="reset"]').on('click', this.#onReset.bind(this))
     }
 
-    async #onChat(event: JQuery.ClickEvent<any, any, HTMLElement>) {
+    async #onChat(event) {
         const item = await getItemFromEvent(event)
         item?.toMessage(undefined, { create: true })
     }
 
-    async #onChecks(event: JQuery.ClickEvent<any, any, HTMLElement>) {
+    async #onChecks(event) {
         const item = await getItemFromEvent(event)
         if (!item) return
 
@@ -89,14 +83,14 @@ export class Identify extends Application {
         await CONFIG.ChatMessage.documentClass.create({ user: game.user.id, content })
     }
 
-    async #onIdentify(event: JQuery.ClickEvent<any, any, HTMLElement>) {
+    async #onIdentify(event) {
         const item = await getItemFromEvent(event)
         if (!item) return
         await item.setIdentificationStatus(item.isIdentified ? 'unidentified' : 'identified')
         this.render()
     }
 
-    async #onRemove(event: JQuery.ClickEvent<any, any, HTMLElement>) {
+    async #onRemove(event) {
         const item = await getItemFromEvent(event)
         if (!item) return
 
@@ -106,7 +100,7 @@ export class Identify extends Application {
         this.render()
     }
 
-    async #onReset(event: JQuery.ClickEvent) {
+    async #onReset(event) {
         event.preventDefault()
 
         for (const item of this.items) {
@@ -118,10 +112,10 @@ export class Identify extends Application {
     }
 }
 
-async function getItemFromEvent(event: JQuery.TriggeredEvent<any, any, HTMLElement>) {
+async function getItemFromEvent(event) {
     const parent = $(event.currentTarget).closest('[data-item]')
-    const uuid = parent.attr('data-item') as string
+    const uuid = parent.attr('data-item')
     const item = await fromUuid(uuid)
     if (!item) parent.remove()
-    return item as PhysicalItemPF2e | null
+    return item
 }

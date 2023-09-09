@@ -1,2 +1,718 @@
-(()=>{"use strict";let e="",t="module";function n(t){game.socket.emit(`module.${e}`,t)}const a="Compendium.pf2e.feats-srd.Item.KlqKpeq5OmTRxVHb";function i(e){const t=["esoteric","esoteric-lore","lore-esoteric"],n=Object.values(e.skills).find((e=>t.includes(e.slug)));return n||ui.notifications.warn("This character doesn't have the 'Esoteric' skill"),n}function s(){return game.i18n.format("PF2E.SkillCheckWithName",{skillName:"Esoteric"})}function o(e){return e.itemTypes.feat.some((e=>e.getFlag("core","sourceId")===a))}function r(e,t){if(!t||!t.isOwner||!t.isOfType("character"))return void ui.notifications.warn("You must select a character token you own.");const n=i(t);if(!n)return;const a=new Set,r=s();let c=`<h4 class="action">${r}</h4><section class="roll-note">Can be used to Recall Knowledge regarding haunts, curses \nand creatures of any type, but can't be used to Recall Knowledge of other topics.</section>`;e.ctrlKey&&o(t)&&(a.add("diverse-lore"),c+='<section class="roll-note"><strong>Diverse Lore</strong> You can take a -2 penalty to your check to Recall \nKnowledge about any topic, not just the usual topics available for Esoteric Lore.</section>'),game.pf2e.Check.roll(new game.pf2e.CheckModifier(c,n),{actor:t,title:r,type:"skill-check",rollMode:"blindroll",options:a})}function c(e){return e.getFlag("core","sourceId")}function l(e){return Array.isArray(e)?t=>function(e,t){const n=c(e);return!!n&&t.includes(n)}(t,e):t=>c(t)===e}function u(e,t){return t?t.flatMap((t=>e.itemTypes[t])):e.items}function d(e,t,n){return u(e,n).find(l(t))}const f=new Set(["arcane","divine","occult","primal"]),m=[];const p={1:"RjuupS9xyXDLgyIr",2:"Y7UD64foDbDMV9sx",3:"ZmefGBXGJF3CFDbn",4:"QSQZJ5BC3DeHv153",5:"tjLvRWklAylFhBHQ",6:"4sGIy77COooxhQuC",7:"fomEZZ4MxVVK3uVu",8:"iPki3yuoucnj7bIt",9:"cFHomF3tty8Wi1e5",10:"o1XIHJ4MJyroAHfF"},h=String.raw`[\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Join_Control}]`,g=String.raw`[^\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Join_Control}]`,y=(new RegExp(g,"gu"),String.raw`(?:${h})(?=${g})|(?:${g})(?=${h})`),w=String.raw`(?:${h})(?=${h})`,v=String.raw`\p{Lowercase_Letter}`,b=String.raw`\p{Uppercase_Letter}`;new RegExp(`(${v})(${b}${w})`,"gu"),new RegExp(`${b}|(?:${y})${v}`,"gu");const k=new Map;k.set(-1,13),k.set(0,14),k.set(1,15),k.set(2,16),k.set(3,18),k.set(4,19),k.set(5,20),k.set(6,22),k.set(7,23),k.set(8,24),k.set(9,26),k.set(10,27),k.set(11,28),k.set(12,30),k.set(13,31),k.set(14,32),k.set(15,34),k.set(16,35),k.set(17,36),k.set(18,38),k.set(19,39),k.set(20,40),k.set(21,42),k.set(22,44),k.set(23,46),k.set(24,48),k.set(25,50);const C=new Map;function M(e,t="common"){return function(e,t="normal"){return e+(C.get(t)??0)}(e,function(e="common"){switch(e){case"uncommon":return"hard";case"rare":return"very-hard";case"unique":return"incredibly-hard";default:return"normal"}}(t))}function I(e){const t=Math.clamped(e.level,-1,25);return k.get(t)}function x(e,{proficiencyWithoutLevel:t=!1,notMatchingTraditionModifier:n}){const a=function(e,{proficiencyWithoutLevel:t,rarity:n="common"}={}){const a=game.settings.get("pf2e","proficiencyVariant");t??="ProficiencyWithoutLevel"===a;const i=k.get(e)??14;return M(t?i-Math.max(e,0):i,n)}(e.level,{proficiencyWithoutLevel:t}),i=function(e){return e.traits.has("cursed")?"unique":e.rarity}(e),s=M(a,i);return e.isMagical?function(e,t,n){const a={occult:t,primal:t,divine:t,arcane:t},i=function(e){const t=e.system.traits.value;return new Set(t.filter((e=>{return t=e,f.has(t);var t})))}(e);for(const e of f)i.size>0&&!i.has(e)&&(a[e]=t+n);return{arcana:a.arcane,nature:a.primal,religion:a.divine,occultism:a.occult}}(e,s,n):e.isAlchemical?{crafting:s}:{dc:s}}C.set("incredibly easy",-10),C.set("very easy",-5),C.set("easy",-2),C.set("normal",0),C.set("hard",2),C.set("very hard",5),C.set("incredibly hard",10);const S="Compendium.idleuh.effects.Item.MqgbuaqGMJ92VRze",O="Compendium.idleuh.effects.Item.Lz5hNf4dbXKjDWBa",F="Compendium.idleuh.effects.Item.8BxBB5ztfRI9vFfZ",j="Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg";async function D(e,t,a){if(e.ctrlKey)return game.user.isGM?Y():n({type:"clean-exploit-vulnerability"}),void ui.notifications.notify("All effects are being removed.");const r=game.user.targets,[c]=r,f=c?.actor;if(!(t&&t.isOwner&&t.isOfType("character")&&1===r.size&&f&&f.isOfType("creature")))return void ui.notifications.warn("You must select a character token you own and target another one.");const m=i(t);if(!m)return;const p=I(f),h=t.getRollOptions(["all","skill-check","Esoteric"]);h.push("action:recall-knowledge"),h.push("secret");const g=f.system.attributes.weaknesses,y=g.reduce(((e,t)=>t.value>e?t.value:e),0),w=g.filter((e=>e.value===y)).map((e=>e.type)),v=await game.pf2e.Check.roll(new game.pf2e.CheckModifier("test",m),{actor:t,target:{actor:f,token:c.document},title:s(),type:"skill-check",options:h,dc:{value:p},createMessage:!1},e),b=v.total??0,k=v.dice[0]?.total??0,C=R(b,k,p),$=d(t,S,["effect"]);if(C>=1&&!$){const e=(await fromUuid(S)).toObject();t.createEmbeddedDocuments("Item",[e])}else if(C<1){$?.delete();const e=function(e,t,n){return u(e,["condition"]).some(l(t))}(t,j);if(!e){const e=(await fromUuid(j)).toObject();t.createEmbeddedDocuments("Item",[e])}}!function(e,t,n,a,i,s,r,c){const l=a-n,u=a-i,d=s>=3?"criticalSuccess":2===s?"success":1===s?"failure":"criticalFailure",f=s>=3?"Critical Success":2===s?"Success":1===s?"Failure":"Critical Failure";let m=`<h4 class="action"><span class="pf2-icon">A</span> <b>Exploit Vulnerability</b> <p class="compact-text">(Esoteric Check)</p></h4>\n<div class="target-dc-result" data-visibility="gm">\n    <div class="target-dc" data-visibility="gm"><span data-visibility="gm" data-whose="target">\n        Target: ${t.name}</span> <span data-visibility="gm" data-whose="target">(Standard DC ${n})</span></div>\n    <div class="result degree-of-success" data-visibility="gm">\n        Result: <span title="Roll: ${i} ${u>=0?"+":"-"} ${Math.abs(u)}">${a}</span> \n        <span data-whose="self" class="${d}">${f}</span> <span data-whose="target">by ${l>=0?"+":""}${l}</span>\n    </div>\n</div>`;s>=2&&c.length&&(m+=`<div><strong>[ ${c.join(", ")} ]</strong> = ${r}</div>`),m+='<section class="roll-note">',m+=s>=3?"<strong>Critical Success</strong> You remember the creature's weaknesses, and as you empower your esoterica, \nyou have a flash of insight that grants even more knowledge about the creature. \nYou learn all of the creature's resistances, weaknesses, and immunities, \nincluding the amounts of the resistances and weaknesses and any unusual weaknesses or vulnerabilities, \nsuch as what spells will pass through a golem's antimagic. \nYou can exploit either the creature's mortal weakness or personal antithesis (see the Exploit Vulnerability class feature). \nYour unarmed and weapon Strikes against the creature also become magical if they weren't already.":2===s?"<strong>Success</strong> You recall an important fact about the creature, \nlearning its highest weakness (or one of its highest weaknesses, if it has multiple with the same value) but not its other weaknesses, \nresistances, or immunities. You can exploit either the creature's mortal weakness or personal antithesis. \nYour unarmed and weapon Strikes against the creature also become magical if they weren't already.":1===s?"<strong>Failure</strong> Failing to recall a salient weakness about the creature, \nyou instead attempt to exploit a more personal vulnerability. \nYou can exploit only the creature's personal antithesis. \nYour unarmed and weapon Strikes against the creature also become magical if they weren't already.":"<strong>Critical Failure</strong> You couldn't remember the right object to use and become distracted while you rummage \nthrough your esoterica. You become flat-footed until the beginning of your next turn.",m+="</section>",o(e)&&s>=2&&(m+=function(e,t,n){const a=e.identificationDCs?.standard.progression,i=a.map((e=>{const a=R(t,n,e);return`<span style="color: ${a>=3?"green":2===a?"blue":"#ff4500"};" title="${a>=3?"Critical Success":2===a?"Success":"Failure"}">${e}</span>`}));return`<section class="roll-note">\n    <strong>Diverse Lore</strong> Compare the result of your Esoteric Lore check to the DC${i.length?` <span data-visibility="gm">${i.join(", ")}</span>`:""} to Recall Knowledge for that creature; \n    if that number would be a success or a critical success, you gain information as if you had succeeded at the Recall Knowledge check.\n</section>`}(t,a,i)),ChatMessage.create({flavor:m,speaker:ChatMessage.getSpeaker({actor:e})})}(t,f,p,b,k,C,y,w);const M=w.filter((e=>!a.includes(e))),x={type:"exploit-vulnerability",actorId:t.id,targetId:c.id,vulnerability:M.length?y:0,success:C};game.user.isGM?T(x):n(x)}async function T({actorId:e,targetId:t,vulnerability:n,success:a}){const i=game.actors.get(e),s=canvas.tokens.get(t)?.actor;if(!i||!s)return;const o=2+Math.floor(i.level/2),r=a>1&&n>=o,c=(await fromUuid(F)).toObject(),l={key:"Weakness",type:"piercing",value:n,predicate:["origin:effect:exploit-vulnerability"]};c.system.rules.push(l);for(const e of canvas.tokens.placeables){const t=e.actor;if(!t||t===i)continue;const l=d(t,O,["effect"]),u=d(t,F,["effect"]);if(await(l?.delete()),await(u?.delete()),!(a<1))if(t===s){const e=(await fromUuid(O)).toObject(),a={key:"Weakness",type:"piercing",value:r?n:o,predicate:["origin:effect:exploit-vulnerability"]};e.system.rules.push(a),t.createEmbeddedDocuments("Item",[e])}else r&&t.id===s.id&&t.createEmbeddedDocuments("Item",[c])}}function Y(){for(const e of canvas.tokens.placeables){const t=e.actor;if(!t)continue;const n=d(t,S,["effect"]),a=d(t,O,["effect"]),i=d(t,F,["effect"]);n?.delete(),a?.delete(),i?.delete()}}function R(e,t,n){let a=e>=n+10?3:e>=n?2:e>n-10?1:0;return 20===t?a++:1===t&&a--,a}function L(...n){return n=n.filter((e=>"string"==typeof e)),`${t}s/${e}/templates/${n.join("/")}`}class E extends Application{items;constructor(e,t){super(t),this.items=e}static get defaultOptions(){return mergeObject(super.defaultOptions,{id:"idleuh-identify",title:"Identify Items",template:L("identify.html"),width:500})}getData(e){return mergeObject(super.getData(e),{items:this.items.map((e=>{const t=e.system.identification.identified,n=e.isIdentified,a=!n&&e.getFlag("world","identify.checked"),i=[];return n&&i.push("identified"),a&&i.push("checked"),{uuid:e.uuid,img:t.img,name:e.isOfType("treasure")?`($) ${t.name}`:t.name,css:i.join(" "),identified:n,checked:a}}))})}activateListeners(e){e.find('[data-action="chat"]').on("click",this.#e.bind(this)),e.find('[data-action="checks"]').on("click",this.#t.bind(this)),e.find('[data-action="identify"]').on("click",this.#n.bind(this)),e.find('[data-action="remove"]').on("click",this.#a.bind(this)),e.find('[data-action="reset"]').on("click",this.#i.bind(this))}async#e(e){(await A(e))?.toMessage(void 0,{create:!0})}async#t(e){const t=await A(e);if(!t)return;const n=t.system.identification.unidentified.img,a=t.system.identification.unidentified.name,i=t.system.identification.identified.name,s=game.settings.get("pf2e","identifyMagicNotMatchingTraditionModifier"),o=x(t,{proficiencyWithoutLevel:"ProficiencyWithoutLevel"===game.settings.get("pf2e","proficiencyVariant"),notMatchingTraditionModifier:s}),r=Object.entries(o).map((([e,t])=>({slug:e="dc"===e?"crafting":e,name:game.i18n.localize(CONFIG.PF2E.skillList[e]),dc:t}))),c=t.isMagical?"action:identify-magic":t.isAlchemical?"action:identify-alchemy":null,l=await renderTemplate("systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs",{itemImg:n,itemName:a,identifiedName:i,rollOptions:["concentrate","exploration","secret",c].filter(Boolean),skills:r});await CONFIG.ChatMessage.documentClass.create({user:game.user.id,content:l})}async#n(e){const t=await A(e);t&&(await t.setIdentificationStatus(t.isIdentified?"unidentified":"identified"),this.render())}async#a(e){const t=await A(e);if(!t)return;const n=t.getFlag("world","identify.checked");await t.setFlag("world","identify.checked",!n),this.render()}async#i(e){e.preventDefault();for(const e of this.items)!e.isIdentified&&e.getFlag("world","identify.checked")&&await e.setFlag("world","identify.checked",!1);this.render()}}async function A(e){const t=$(e.currentTarget).closest("[data-item]"),n=t.attr("data-item"),a=await fromUuid(n);return a||t.remove(),a}function N(){if(!game.user.isGM)return void ui.notifications.warn("You not the GM yo!");const e=game.actors.reduce(((e,t)=>{if(!t.hasPlayerOwner)return e;const n=t.items.filter((e=>e.isOfType("physical")&&!e.isIdentified));return e.push(...n),e}),[]);new E(e).render(!0)}const U="pf2e.spells-srd",G="Item.dcALVAyJbYSovzqt";async function V(e){if(!e)return ui.notifications.warn("You must select an actor with the Imaginarium");const t=e.itemTypes.equipment.find((e=>e.getFlag("core","sourceId")===G));if(!t||"dropped"===t.system.equipped.carryType)return ui.notifications.warn("This actor doesn't have the Imaginarium in their possession");const n=Math.floor(e.level/2),a=game.packs.get(U),i=(await a.getIndex({fields:["system.level.value","system.traits","system.category.value"]})).filter((e=>e.system.level.value<=n&&!e.system.traits.value.includes("cantrip")&&"ritual"!==e.system.category.value&&"focus"!==e.system.category.value&&"common"===e.system.traits.rarity)),s=i[Math.floor(Math.random()*i.length)],o=`Compendium.${U}.${s._id}`;let r=o,c="";const l=await async function(e,t,n=!1){const a=(await fromUuid(e))?.toObject();if(!a)return null;!1===t&&(t=a.system.level.value);const i=function(e){return`Compendium.pf2e.equipment-srd.Item.${p[e]}`}(t);m[t]??=await fromUuid(i);const s=m[t]?.toObject();if(!s)return null;a.system.location.heightenedLevel=t,s.name=`Scroll of ${a.name} (Level ${t})`,s.system.temporary=n,s.system.spell=a,s.system.traits.value.push(...a.system.traditions.value);const o=a.flags.core?.sourceId;return o&&(s.system.description.value=`${function(e,t){return`@UUID[${e}]`}(o)}\n<hr />${s.system.description.value}`),s}(o,n);if(l){l.name=l.name+" *";const[t]=await e.createEmbeddedDocuments("Item",[l]);c=" and received the following:",r=t.uuid}ChatMessage.create({content:`<p>Ripped the last page of the Imaginarium${c}</p><p>@UUID[${r}]</p>`,speaker:ChatMessage.getSpeaker({actor:e})})}class P extends FormApplication{static get defaultOptions(){return mergeObject(super.defaultOptions,{id:"idleuh-manual-token",template:L("manual-token.html"),title:"Manual Token Update",width:500})}activateListeners(e){super.activateListeners(e),e.find("button[type=button]").on("click",(()=>this.close()));const t=e.find("input[name=scale]"),n=t.next("span");t.on("input",(()=>{const e=t[0].valueAsNumber;n.text(e.toFixed(2))}));const a=e.find("input[name=grid]"),i=a.next("span");a.on("input",(()=>{const e=a[0].valueAsNumber;i.text(e.toFixed(1))}))}async _updateObject(e,t){const n=this.object,a={displayName:Number(t.name),displayBars:Number(t.hp),"texture.src":t.img,"flags.pf2e.linkToActorSize":!!t.link,width:Number(t.grid),height:Number(t.grid),"texture.scaleX":Number(t.scale),"texture.scaleY":Number(t.scale)},i={};for(const[e,t]of Object.entries(a))getProperty(n,e)!==t&&setProperty(i,e,t);Object.keys(i).length&&this.object.update(i)}}async function W(e){e&&e.isOwner?new P(e.document).render(!0):ui.notifications.warn("You need to select an owned token.")}const q=["trained","expert","master","legendary","untrained"];async function K(){if(!game.user.isGM)return void ui.notifications.warn("You not the GM yo!");let e="<hr>";const t=canvas.tokens;for(const n of t.placeables){const t=n.actor;t&&t.isOfType("character","npc")&&t.hasPlayerOwner&&t.attributes.perception&&(e+=await B(t))}ChatMessage.create({content:e,flavor:"Group Perception Checks",whisper:[game.user.id]})}async function B(e){const t=e.attributes.perception,n=new game.pf2e.CheckModifier("",t),a=await game.pf2e.Check.roll(n,{actor:e,type:"skill-check",createMessage:!1,skipDialog:!0});if(!a)return"";const i=q[(t.rank??1)-1],s=a.dice[0].total;if(void 0===s)return"";let o=`<div style="display:flex;justify-content:space-between;" title="${a.result}">`;return o+=`<span>${e.name} (${i})</span><span`,20==s?o+=' style="color: green;"':1==s&&(o+=' style="color: red;"'),`${o}>${a.total}</span></div>`}const J="Compendium.idleuh.effects.Item.jjFsfolNR04KzPVh",z="Compendium.idleuh.feats.Item.X3SZ0gTpBkGw3UGX",_="Compendium.idleuh.effects.Item.r0hicuQPY0OEAC6g";async function H(e,t){if(!t||!t.isOwner||!t.isOfType("character"))return void ui.notifications.warn("You must select a character token you own.");if(!d(t,z,["feat"]))return void ui.notifications.warn("This character doesn't have <strong>Inspiring Marshal Stance</strong> feat.");if(d(t,_,["effect"]))return void ui.notifications.warn("This character cannot enter <strong>Inspiring Marshal Stance</strong>.");const n=I(t),a=await t.skills.diplomacy.roll({createMessage:!1}),i=a.total,s=a.dice[0].total,o=function(e,t,n){let a=e>=n+10?3:e>=n?2:e>n-10?1:0;return 20===t?a++:1===t&&a--,Math.clamped(a,0,3)}(i,s,n);o>=2?await async function(e,t){const n=3===t?20:10,a=await Q(e);if(a){const e=deepClone(a._source.system.rules),t=e.find((e=>"ChoiceSet"===e.key));if(t.selection===n)return;return t.selection=n,void a.update({"system.rules":e})}const i=await fromUuid(J);if(!i)return;const s=i.toObject();s.system.rules.find((e=>"ChoiceSet"===e.key)).selection=n,await e.createEmbeddedDocuments("Item",[s])}(t,o):(await((await Q(t))?.delete()),0===o&&await async function(e){const t=await fromUuid(_);t&&await e.createEmbeddedDocuments("Item",[t.toObject()])}(t)),function(e,t,n,a,i){const s=n-i,o=n-a,r=t>=3?"criticalSuccess":2===t?"success":1===t?"failure":"criticalFailure",c=t>=3?"Critical Success":2===t?"Success":1===t?"Failure":"Critical Failure";let l=`<h4 class="action"><span class="pf2-icon">A</span> <b>Marshal Inspiration</b> <p class="compact-text">(Diplomacy Check)</p></h4>\n    <div class="target-dc-result">\n        <div class="target-dc"><span data-whose="target">Standard DC ${i}</span></div>\n        <div class="result degree-of-success">\n            Result: <span title="Roll: ${a} ${o>=0?"+":"-"} ${Math.abs(o)}">${n}</span> \n            <span data-whose="self" class="${r}">${c}</span> <span data-whose="target">by ${s>=0?"+":""}${s}</span>\n        </div>\n    </div>`;l+='<section class="roll-note">',l+=3===t?"<strong>Critical Success</strong> Your marshal's aura increases to a 20ft. emanation and \ngrants you and allies a +1 status bonus to attack rolls and saves against mental effects.":2===t?"<strong>Success</strong> Your marshal's aura grants you and allies a +1 status bonus to \nattack rolls and saves against mental effects.":1===t?"<strong>Failure</strong> You fail to enter the stance.":"<strong>Critical Failure</strong> You fail to enter the stance and can't take this action again for 1 minute.",l+="</section>",ChatMessage.create({flavor:l,speaker:ChatMessage.getSpeaker({actor:e})})}(t,o,i,s,n)}async function Q(e){return d(e,J,["effect"])}const X="idleuh";function Z(e){jQuery.fx.off=e}function ee(e){"exploit-vulnerability"===e.type?T(e):"clean-exploit-vulnerability"===e.type&&Y()}!function(n,a=!1){e||(e=n),t=a?"system":"module"}(X),Hooks.once("init",(()=>{var t;(t=e,game.modules.get(t)).api={macros:{exploitVulnerability:D,esotericCheck:r,manualToken:W,groupPerception:K,identify:N,ripImaginarium:V,marshalInspiration:H}},game.settings.register(X,"jquery",{name:"Disable JQuery Animations",hint:"Will cancel sliding animations on different parts of the UI.",type:Boolean,default:!1,config:!0,scope:"client",onChange:Z})})),Hooks.once("ready",(()=>{var t;game.user.isGM&&(t=ee,game.socket.on(`module.${e}`,t)),game.settings.get(e,"jquery")&&Z(!0)}))})();
+(() => {
+  var __defProp = Object.defineProperty;
+  var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+
+  // src/macros/shared/esoteric.js
+  function getEsotericSkill(actor) {
+    const skillKeys = ["esoteric", "esoteric-lore", "lore-esoteric"];
+    const skill = Object.values(actor.skills).find((x) => skillKeys.includes(x.slug));
+    if (!skill)
+      ui.notifications.warn(`This character doesn't have the 'Esoteric' skill`);
+    return skill;
+  }
+  __name(getEsotericSkill, "getEsotericSkill");
+
+  // src/macros/esoteric.js
+  function esotericCheck(event, actor) {
+    if (!actor || !actor.isOwner || !actor.isOfType("character")) {
+      ui.notifications.warn("You must select a character token you own.");
+      return;
+    }
+    const skill = getEsotericSkill(actor);
+    if (!skill)
+      return;
+    const extraRollOptions = /* @__PURE__ */ new Set();
+    const extraRollNotes = [
+      {
+        text: `Can be used to Recall Knowledge regarding haunts, curses 
+    and creatures of any type, but can't be used to Recall Knowledge of other topics.`
+      }
+    ];
+    skill.roll({
+      rollMode: "blindroll",
+      extraRollNotes,
+      options: extraRollOptions
+    });
+  }
+  __name(esotericCheck, "esotericCheck");
+
+  // src/module.js
+  var MODULE_ID = "idleuh";
+  function getSetting(key) {
+    return game.settings.get(MODULE_ID, key);
+  }
+  __name(getSetting, "getSetting");
+  function socketOn(callback) {
+    game.socket.on(`module.${MODULE_ID}`, callback);
+  }
+  __name(socketOn, "socketOn");
+  function socketEmit(packet) {
+    game.socket.emit(`module.${MODULE_ID}`, packet);
+  }
+  __name(socketEmit, "socketEmit");
+  function templatePath(...path) {
+    path = path.filter((x) => typeof x === "string");
+    return `modules/${MODULE_ID}/templates/${path.join("/")}`;
+  }
+  __name(templatePath, "templatePath");
+  function chatUUID(uuid, name) {
+    if (name)
+      return `@UUID[${uuid}]{${name}}`;
+    return `@UUID[${uuid}]`;
+  }
+  __name(chatUUID, "chatUUID");
+  function getItemSourceIdCondition(sourceId) {
+    return Array.isArray(sourceId) ? (item) => includesSourceId(item, sourceId) : (item) => getSourceId(item) === sourceId;
+  }
+  __name(getItemSourceIdCondition, "getItemSourceIdCondition");
+  function getItems(actor, itemTypes) {
+    return itemTypes ? itemTypes.flatMap((type) => actor.itemTypes[type]) : actor.items;
+  }
+  __name(getItems, "getItems");
+  function findItemWithSourceId(actor, sourceId, itemTypes) {
+    return getItems(actor, itemTypes).find(getItemSourceIdCondition(sourceId));
+  }
+  __name(findItemWithSourceId, "findItemWithSourceId");
+  function getSourceId(doc) {
+    return doc.getFlag("core", "sourceId");
+  }
+  __name(getSourceId, "getSourceId");
+  function includesSourceId(doc, list) {
+    const sourceId = getSourceId(doc);
+    return sourceId ? list.includes(sourceId) : false;
+  }
+  __name(includesSourceId, "includesSourceId");
+  function hasItemWithSourceId(actor, sourceId, itemTypes) {
+    return getItems(actor, itemTypes).some(getItemSourceIdCondition(sourceId));
+  }
+  __name(hasItemWithSourceId, "hasItemWithSourceId");
+
+  // src/pf2e.js
+  var MAGIC_TRADITIONS = /* @__PURE__ */ new Set(["arcane", "divine", "occult", "primal"]);
+  function getItemIdentificationDCs(item, { proficiencyWithoutLevel = false, notMatchingTraditionModifier }) {
+    const baseDC = calculateDC(item.level, { proficiencyWithoutLevel });
+    const rarity = getDcRarity(item);
+    const dc = adjustDCByRarity(baseDC, rarity);
+    if (item.isMagical) {
+      return getIdentifyMagicDCs(item, dc, notMatchingTraditionModifier);
+    } else if (item.isAlchemical) {
+      return { crafting: dc };
+    } else {
+      return { dc };
+    }
+  }
+  __name(getItemIdentificationDCs, "getItemIdentificationDCs");
+  function setHasElement(set, value) {
+    return set.has(value);
+  }
+  __name(setHasElement, "setHasElement");
+  function getMagicTraditions(item) {
+    const traits = item.system.traits.value;
+    return new Set(traits.filter((t) => setHasElement(MAGIC_TRADITIONS, t)));
+  }
+  __name(getMagicTraditions, "getMagicTraditions");
+  function getIdentifyMagicDCs(item, baseDC, notMatchingTraditionModifier) {
+    const result = {
+      occult: baseDC,
+      primal: baseDC,
+      divine: baseDC,
+      arcane: baseDC
+    };
+    const traditions = getMagicTraditions(item);
+    for (const key of MAGIC_TRADITIONS) {
+      if (traditions.size > 0 && !traditions.has(key)) {
+        result[key] = baseDC + notMatchingTraditionModifier;
+      }
+    }
+    return { arcana: result.arcane, nature: result.primal, religion: result.divine, occultism: result.occult };
+  }
+  __name(getIdentifyMagicDCs, "getIdentifyMagicDCs");
+  function getDcRarity(item) {
+    return item.traits.has("cursed") ? "unique" : item.rarity;
+  }
+  __name(getDcRarity, "getDcRarity");
+  var dcByLevel = /* @__PURE__ */ new Map([
+    [-1, 13],
+    [0, 14],
+    [1, 15],
+    [2, 16],
+    [3, 18],
+    [4, 19],
+    [5, 20],
+    [6, 22],
+    [7, 23],
+    [8, 24],
+    [9, 26],
+    [10, 27],
+    [11, 28],
+    [12, 30],
+    [13, 31],
+    [14, 32],
+    [15, 34],
+    [16, 35],
+    [17, 36],
+    [18, 38],
+    [19, 39],
+    [20, 40],
+    [21, 42],
+    [22, 44],
+    [23, 46],
+    [24, 48],
+    [25, 50]
+  ]);
+  var dcAdjustments = /* @__PURE__ */ new Map([
+    ["incredibly-easy", -10],
+    ["very-easy", -5],
+    ["easy", -2],
+    ["normal", 0],
+    ["hard", 2],
+    ["very-hard", 5],
+    ["incredibly-hard", 10]
+  ]);
+  function rarityToDCAdjustment(rarity = "common") {
+    switch (rarity) {
+      case "uncommon":
+        return "hard";
+      case "rare":
+        return "very-hard";
+      case "unique":
+        return "incredibly-hard";
+      default:
+        return "normal";
+    }
+  }
+  __name(rarityToDCAdjustment, "rarityToDCAdjustment");
+  function adjustDC(dc, adjustment = "normal") {
+    return dc + (dcAdjustments.get(adjustment) ?? 0);
+  }
+  __name(adjustDC, "adjustDC");
+  function adjustDCByRarity(dc, rarity = "common") {
+    return adjustDC(dc, rarityToDCAdjustment(rarity));
+  }
+  __name(adjustDCByRarity, "adjustDCByRarity");
+  function calculateDC(level, { proficiencyWithoutLevel, rarity = "common" } = {}) {
+    const pwlSetting = game.settings.get("pf2e", "proficiencyVariant");
+    proficiencyWithoutLevel ??= pwlSetting === "ProficiencyWithoutLevel";
+    const dc = dcByLevel.get(level) ?? 14;
+    if (proficiencyWithoutLevel) {
+      return adjustDCByRarity(dc - Math.max(level, 0), rarity);
+    } else {
+      return adjustDCByRarity(dc, rarity);
+    }
+  }
+  __name(calculateDC, "calculateDC");
+  var scrollCompendiumIds = {
+    1: "RjuupS9xyXDLgyIr",
+    // Compendium.pf2e.equipment-srd.Item.RjuupS9xyXDLgyIr
+    2: "Y7UD64foDbDMV9sx",
+    3: "ZmefGBXGJF3CFDbn",
+    4: "QSQZJ5BC3DeHv153",
+    5: "tjLvRWklAylFhBHQ",
+    6: "4sGIy77COooxhQuC",
+    7: "fomEZZ4MxVVK3uVu",
+    8: "iPki3yuoucnj7bIt",
+    9: "cFHomF3tty8Wi1e5",
+    10: "o1XIHJ4MJyroAHfF"
+  };
+  function getScrollCompendiumUUID(level) {
+    return `Compendium.pf2e.equipment-srd.Item.${scrollCompendiumIds[level]}`;
+  }
+  __name(getScrollCompendiumUUID, "getScrollCompendiumUUID");
+  var scrolls = [];
+  async function createSpellScroll(uuid, level, temp = false) {
+    const spell = (await fromUuid(uuid))?.toObject();
+    if (!spell)
+      return null;
+    if (level === false)
+      level = spell.system.level.value;
+    const scrollUUID = getScrollCompendiumUUID(level);
+    scrolls[level] ??= await fromUuid(scrollUUID);
+    const scroll = scrolls[level]?.toObject();
+    if (!scroll)
+      return null;
+    spell.system.location.heightenedLevel = level;
+    scroll.name = `Scroll of ${spell.name} (Level ${level})`;
+    scroll.system.temporary = temp;
+    scroll.system.spell = spell;
+    scroll.system.traits.value.push(...spell.system.traditions.value);
+    const sourceId = spell.flags.core?.sourceId;
+    if (sourceId)
+      scroll.system.description.value = `${chatUUID(sourceId)}
+<hr />${scroll.system.description.value}`;
+    return scroll;
+  }
+  __name(createSpellScroll, "createSpellScroll");
+  function getDcByLevel(actor) {
+    const level = Math.clamped(actor.level, -1, 25);
+    return dcByLevel.get(level);
+  }
+  __name(getDcByLevel, "getDcByLevel");
+
+  // src/apps/identify.js
+  var Identify = class extends Application {
+    constructor(items, options) {
+      super(options);
+      this.items = items;
+    }
+    static get defaultOptions() {
+      return mergeObject(super.defaultOptions, {
+        id: "idleuh-identify",
+        title: "Identify Items",
+        template: templatePath("identify.html"),
+        width: 500
+      });
+    }
+    getData(options) {
+      return mergeObject(super.getData(options), {
+        items: this.items.map((item) => {
+          const data = item.system.identification.identified;
+          const identified = item.isIdentified;
+          const checked = !identified && item.getFlag("world", "identify.checked");
+          const classes = [];
+          if (identified)
+            classes.push("identified");
+          if (checked)
+            classes.push("checked");
+          return {
+            uuid: item.uuid,
+            img: data.img,
+            name: item.isOfType("treasure") ? `($) ${data.name}` : data.name,
+            css: classes.join(" "),
+            identified,
+            checked
+          };
+        })
+      });
+    }
+    activateListeners(html) {
+      html.find('[data-action="chat"]').on("click", this.#onChat.bind(this));
+      html.find('[data-action="checks"]').on("click", this.#onChecks.bind(this));
+      html.find('[data-action="identify"]').on("click", this.#onIdentify.bind(this));
+      html.find('[data-action="remove"]').on("click", this.#onRemove.bind(this));
+      html.find('[data-action="reset"]').on("click", this.#onReset.bind(this));
+    }
+    async #onChat(event) {
+      const item = await getItemFromEvent(event);
+      item?.toMessage(void 0, { create: true });
+    }
+    async #onChecks(event) {
+      const item = await getItemFromEvent(event);
+      if (!item)
+        return;
+      const itemImg = item.system.identification.unidentified.img;
+      const itemName = item.system.identification.unidentified.name;
+      const identifiedName = item.system.identification.identified.name;
+      const notMatchingTraditionModifier = game.settings.get("pf2e", "identifyMagicNotMatchingTraditionModifier");
+      const proficiencyWithoutLevel = game.settings.get("pf2e", "proficiencyVariant") === "ProficiencyWithoutLevel";
+      const dcs = getItemIdentificationDCs(item, { proficiencyWithoutLevel, notMatchingTraditionModifier });
+      const skills = Object.entries(dcs).map(([slug, dc]) => {
+        slug = slug === "dc" ? "crafting" : slug;
+        const name = game.i18n.localize(CONFIG.PF2E.skillList[slug]);
+        return { slug, name, dc };
+      });
+      const actionOption = item.isMagical ? "action:identify-magic" : item.isAlchemical ? "action:identify-alchemy" : null;
+      const content = await renderTemplate("systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs", {
+        itemImg,
+        itemName,
+        identifiedName,
+        rollOptions: ["concentrate", "exploration", "secret", actionOption].filter(Boolean),
+        skills
+      });
+      await CONFIG.ChatMessage.documentClass.create({ user: game.user.id, content });
+    }
+    async #onIdentify(event) {
+      const item = await getItemFromEvent(event);
+      if (!item)
+        return;
+      await item.setIdentificationStatus(item.isIdentified ? "unidentified" : "identified");
+      this.render();
+    }
+    async #onRemove(event) {
+      const item = await getItemFromEvent(event);
+      if (!item)
+        return;
+      const checked = item.getFlag("world", "identify.checked");
+      await item.setFlag("world", "identify.checked", !checked);
+      this.render();
+    }
+    async #onReset(event) {
+      event.preventDefault();
+      for (const item of this.items) {
+        if (item.isIdentified || !item.getFlag("world", "identify.checked"))
+          continue;
+        await item.setFlag("world", "identify.checked", false);
+      }
+      this.render();
+    }
+  };
+  __name(Identify, "Identify");
+  async function getItemFromEvent(event) {
+    const parent = $(event.currentTarget).closest("[data-item]");
+    const uuid = parent.attr("data-item");
+    const item = await fromUuid(uuid);
+    if (!item)
+      parent.remove();
+    return item;
+  }
+  __name(getItemFromEvent, "getItemFromEvent");
+
+  // src/macros/identify.js
+  function identify() {
+    if (!game.user.isGM) {
+      ui.notifications.warn("You not the GM yo!");
+      return;
+    }
+    const actors = game.actors;
+    const items = actors.reduce((acc, actor) => {
+      if (!actor.hasPlayerOwner)
+        return acc;
+      const filtered = actor.items.filter((item) => item.isOfType("physical") && !item.isIdentified);
+      acc.push(...filtered);
+      return acc;
+    }, []);
+    new Identify(items).render(true);
+  }
+  __name(identify, "identify");
+
+  // src/macros/imaginarium.js
+  var packId = "pf2e.spells-srd";
+  var bookId = "Item.dcALVAyJbYSovzqt";
+  async function ripImaginarium(actor) {
+    if (!actor)
+      return ui.notifications.warn("You must select an actor with the Imaginarium");
+    const book = actor.itemTypes.equipment.find((x) => x.getFlag("core", "sourceId") === bookId);
+    if (!book || book.system.equipped.carryType === "dropped")
+      return ui.notifications.warn("This actor doesn't have the Imaginarium in their possession");
+    const level = Math.floor(actor.level / 2) || 1;
+    const pack = game.packs.get(packId);
+    const index = await pack.getIndex({ fields: ["system.level.value", "system.traits", "system.category.value"] });
+    const spells = index.filter(
+      (x) => x.system.level.value <= level && !x.system.traits.value.includes("cantrip") && x.system.category.value !== "ritual" && x.system.category.value !== "focus" && x.system.traits.rarity === "common"
+    );
+    const roll = Math.floor(Math.random() * spells.length);
+    const spell = spells[roll];
+    const uuid = `Compendium.${packId}.${spell._id}`;
+    let messageUUID = uuid;
+    let extraMessage = "";
+    const scroll = await createSpellScroll(uuid, level);
+    if (scroll) {
+      scroll.name = scroll.name + " *";
+      const [item] = await actor.createEmbeddedDocuments("Item", [scroll]);
+      extraMessage = " and received the following:";
+      messageUUID = item.uuid;
+    }
+    ChatMessage.create({
+      content: `<p>Ripped the last page of the Imaginarium${extraMessage}</p><p>@UUID[${messageUUID}]</p>`,
+      speaker: ChatMessage.getSpeaker({ actor })
+    });
+  }
+  __name(ripImaginarium, "ripImaginarium");
+
+  // src/macros/marshal.js
+  var effectUUID = "Compendium.idleuh.effects.Item.jjFsfolNR04KzPVh";
+  var featUUID = "Compendium.idleuh.feats.Item.X3SZ0gTpBkGw3UGX";
+  var debuffUUID = "Compendium.idleuh.effects.Item.r0hicuQPY0OEAC6g";
+  async function marshalInspiration(event, actor) {
+    if (!actor || !actor.isOwner || !actor.isOfType("character")) {
+      ui.notifications.warn("You must select a character token you own.");
+      return;
+    }
+    if (!findItemWithSourceId(actor, featUUID, ["feat"])) {
+      ui.notifications.warn("This character doesn't have <strong>Inspiring Marshal Stance</strong> feat.");
+      return;
+    }
+    if (findItemWithSourceId(actor, debuffUUID, ["effect"])) {
+      ui.notifications.warn("This character cannot enter <strong>Inspiring Marshal Stance</strong>.");
+      return;
+    }
+    const dc = getDcByLevel(actor);
+    const roll = await actor.skills.diplomacy.roll({
+      dc: { value: dc },
+      rollMode: "roll",
+      label: '<span class="pf2-icon">A</span> <b>Marshal Inspiration</b> <span>(Diplomacy Check)</span>',
+      extraRollNotes: [
+        {
+          outcome: ["criticalFailure"],
+          text: `<strong>Critical Failure</strong> You fail to enter the stance and can't take this action again for 1 minute.`
+        },
+        {
+          outcome: ["failure"],
+          text: `<strong>Failure</strong> You fail to enter the stance.`
+        },
+        {
+          outcome: ["success"],
+          text: `<strong>Success</strong> Your marshal's aura grants you and allies a +1 status bonus to attack rolls and saves against mental effects.`
+        },
+        {
+          outcome: ["criticalSuccess"],
+          text: `<strong>Critical Success</strong> Your marshal's aura increases to a 20ft. emanation and grants you and allies a +1 status bonus to attack rolls and saves against mental effects.`
+        }
+      ]
+    });
+    const success = roll.degreeOfSuccess;
+    if (success >= 2) {
+      await setEffect(actor, success);
+    } else {
+      await (await getEffect(actor))?.delete();
+      if (success === 0)
+        await setDebuff(actor);
+    }
+  }
+  __name(marshalInspiration, "marshalInspiration");
+  async function setDebuff(actor) {
+    const effect = await fromUuid(debuffUUID);
+    if (!effect)
+      return;
+    await actor.createEmbeddedDocuments("Item", [effect.toObject()]);
+  }
+  __name(setDebuff, "setDebuff");
+  async function setEffect(actor, success) {
+    const radius = success === 3 ? 20 : 10;
+    const existing = await getEffect(actor);
+    if (existing) {
+      const rules = deepClone(existing._source.system.rules);
+      const rule2 = rules.find((rule3) => rule3.key === "ChoiceSet");
+      if (rule2.selection === radius)
+        return;
+      rule2.selection = radius;
+      existing.update({ "system.rules": rules });
+      return;
+    }
+    const effect = await fromUuid(effectUUID);
+    if (!effect)
+      return;
+    const source = effect.toObject();
+    const rule = source.system.rules.find((rule2) => rule2.key === "ChoiceSet");
+    rule.selection = radius;
+    await actor.createEmbeddedDocuments("Item", [source]);
+  }
+  __name(setEffect, "setEffect");
+  async function getEffect(actor) {
+    return findItemWithSourceId(actor, effectUUID, ["effect"]);
+  }
+  __name(getEffect, "getEffect");
+
+  // src/macros/perception.js
+  var proficiency = ["trained", "expert", "master", "legendary", "untrained"];
+  async function groupPerception() {
+    if (!game.user.isGM) {
+      ui.notifications.warn("You not the GM yo!");
+      return;
+    }
+    let result = "<hr>";
+    const tokens = canvas.tokens;
+    for (const token of tokens.placeables) {
+      const actor = token.actor;
+      if (!actor || !actor.isOfType("character", "npc") || !actor.hasPlayerOwner || !actor.attributes.perception)
+        continue;
+      result += await rollPerception(actor);
+    }
+    ChatMessage.create({ content: result, flavor: "Group Perception Checks", whisper: [game.user.id] });
+  }
+  __name(groupPerception, "groupPerception");
+  async function rollPerception(actor) {
+    const perception = actor.attributes.perception;
+    const check = new game.pf2e.CheckModifier("", perception);
+    const roll = await game.pf2e.Check.roll(check, { actor, type: "skill-check", createMessage: false, skipDialog: true });
+    if (!roll)
+      return "";
+    const rank = proficiency[(perception.rank ?? 1) - 1];
+    const die = roll.dice[0].total;
+    if (die === void 0)
+      return "";
+    let result = `<div style="display:flex;justify-content:space-between;" title="${roll.result}">`;
+    result += `<span>${actor.name} (${rank})</span><span`;
+    if (die == 20)
+      result += ' style="color: green;"';
+    else if (die == 1)
+      result += ' style="color: red;"';
+    return `${result}>${roll.total}</span></div>`;
+  }
+  __name(rollPerception, "rollPerception");
+
+  // src/macros/vulnerability.js
+  var effectUUID2 = "Compendium.idleuh.effects.Item.MqgbuaqGMJ92VRze";
+  var targetUUID = "Compendium.idleuh.effects.Item.Lz5hNf4dbXKjDWBa";
+  var mortalUUID = "Compendium.idleuh.effects.Item.8BxBB5ztfRI9vFfZ";
+  var ffUUID = "Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg";
+  async function exploitVulnerability(event, actor, filterTypes) {
+    if (event.ctrlKey) {
+      if (game.user.isGM)
+        cleanExploitVulnerabilityGM();
+      else
+        socketEmit({ type: "clean-exploit-vulnerability" });
+      ui.notifications.notify("All effects are being removed.");
+      return;
+    }
+    const targets = game.user.targets;
+    const [target] = targets;
+    const targetActor = target?.actor;
+    if (!actor || !actor.isOwner || !actor.isOfType("character") || targets.size !== 1 || !targetActor || !targetActor.isOfType("creature")) {
+      ui.notifications.warn("You must select a character token you own and target another one.");
+      return;
+    }
+    const skill = getEsotericSkill(actor);
+    if (!skill)
+      return;
+    const actionSlug = "action:recall-knowledge";
+    const dc = getDcByLevel(targetActor);
+    const extraRollOptions = actor.getRollOptions(["all", "skill-check", "Esoteric"]);
+    extraRollOptions.push(actionSlug);
+    extraRollOptions.push(`secret`);
+    const dv = targetActor.system.attributes.weaknesses;
+    const vulnerability = dv.reduce((prev, curr) => {
+      if (curr.value > prev)
+        return curr.value;
+      return prev;
+    }, 0);
+    const weaknesses = dv.filter((x) => x.value === vulnerability).map((x) => x.type);
+    const joinedWeaknessess = weaknesses.join(", ");
+    const roll = await skill.roll({
+      extraRollOptions,
+      dc: { value: dc },
+      rollMode: "roll",
+      label: `<span class="pf2-icon">A</span> <b>Exploit Vulnerability</b> <span">(Esoteric Check)</span>`,
+      extraRollNotes: [
+        {
+          outcome: ["criticalFailure"],
+          text: `<strong>Critical Failure</strong> You couldn't remember the right object to use and become distracted while you rummage through your esoterica. You become flat-footed until the beginning of your next turn.`
+        },
+        {
+          outcome: ["failure"],
+          text: `<strong>Failure</strong> Failing to recall a salient weakness about the creature, you instead attempt to exploit a more personal vulnerability. You can exploit only the creature's personal antithesis. Your unarmed and weapon Strikes against the creature also become magical if they weren't already.`
+        },
+        {
+          outcome: ["success"],
+          text: `<strong>[ ${joinedWeaknessess} ]</strong> = ${vulnerability}<br><strong>Success</strong> You recall an important fact about the creature, learning its highest weakness (or one of its highest weaknesses, if it has multiple with the same value) but not its other weaknesses, resistances, or immunities. You can exploit either the creature's mortal weakness or personal antithesis. Your unarmed and weapon Strikes against the creature also become magical if they weren't already.`
+        },
+        {
+          outcome: ["criticalSuccess"],
+          text: `<strong>[ ${joinedWeaknessess} ]</strong> = ${vulnerability}<br><strong>Critical Success</strong> You remember the creature's weaknesses, and as you empower your esoterica, you have a flash of insight that grants even more knowledge about the creature. You learn all of the creature's resistances, weaknesses, and immunities, including the amounts of the resistances and weaknesses and any unusual weaknesses or vulnerabilities, such as what spells will pass through a golem's antimagic. You can exploit either the creature's mortal weakness or personal antithesis (see the Exploit Vulnerability class feature). Your unarmed and weapon Strikes against the creature also become magical if they weren't already.`
+        }
+      ]
+    });
+    const success = roll.degreeOfSuccess;
+    const effect = findItemWithSourceId(actor, effectUUID2, ["effect"]);
+    if (success >= 1 && !effect) {
+      const data = (await fromUuid(effectUUID2)).toObject();
+      actor.createEmbeddedDocuments("Item", [data]);
+    } else if (success < 1) {
+      effect?.delete();
+      const flatEffect = hasItemWithSourceId(actor, ffUUID, ["condition"]);
+      if (!flatEffect) {
+        const data = (await fromUuid(ffUUID)).toObject();
+        actor.createEmbeddedDocuments("Item", [data]);
+      }
+    }
+    const filteredWeaknesses = weaknesses.filter((x) => !filterTypes.includes(x));
+    const packet = {
+      type: "exploit-vulnerability",
+      actorId: actor.id,
+      targetId: target.id,
+      vulnerability: filteredWeaknesses.length ? vulnerability : 0,
+      success
+    };
+    if (game.user.isGM)
+      exploitVulnerabilityGM(packet);
+    else
+      socketEmit(packet);
+  }
+  __name(exploitVulnerability, "exploitVulnerability");
+  async function exploitVulnerabilityGM({ actorId, targetId, vulnerability, success }) {
+    const actor = game.actors.get(actorId);
+    const targetActor = canvas.tokens.get(targetId)?.actor;
+    if (!actor || !targetActor)
+      return;
+    const personal = 2 + Math.floor(actor.level / 2);
+    const isMortal = success > 1 && vulnerability >= personal;
+    const mortalData = (await fromUuid(mortalUUID)).toObject();
+    const rule = {
+      key: "Weakness",
+      type: "piercing",
+      value: vulnerability,
+      predicate: ["origin:effect:exploit-vulnerability"]
+    };
+    mortalData.system.rules.push(rule);
+    for (const token of canvas.tokens.placeables) {
+      const tokenActor = token.actor;
+      if (!tokenActor || tokenActor === actor)
+        continue;
+      const targetEffect = findItemWithSourceId(tokenActor, targetUUID, ["effect"]);
+      const mortalsEffect = findItemWithSourceId(tokenActor, mortalUUID, ["effect"]);
+      await targetEffect?.delete();
+      await mortalsEffect?.delete();
+      if (success < 1)
+        continue;
+      if (tokenActor === targetActor) {
+        const data = (await fromUuid(targetUUID)).toObject();
+        const rule2 = {
+          key: "Weakness",
+          type: "piercing",
+          value: isMortal ? vulnerability : personal,
+          predicate: ["origin:effect:exploit-vulnerability"]
+        };
+        data.system.rules.push(rule2);
+        tokenActor.createEmbeddedDocuments("Item", [data]);
+      } else if (isMortal && tokenActor.id === targetActor.id) {
+        tokenActor.createEmbeddedDocuments("Item", [mortalData]);
+      }
+    }
+  }
+  __name(exploitVulnerabilityGM, "exploitVulnerabilityGM");
+  function cleanExploitVulnerabilityGM() {
+    for (const token of canvas.tokens.placeables) {
+      const tokenActor = token.actor;
+      if (!tokenActor)
+        continue;
+      const effect = findItemWithSourceId(tokenActor, effectUUID2, ["effect"]);
+      const targetEffect = findItemWithSourceId(tokenActor, targetUUID, ["effect"]);
+      const mortalsEffect = findItemWithSourceId(tokenActor, mortalUUID, ["effect"]);
+      effect?.delete();
+      targetEffect?.delete();
+      mortalsEffect?.delete();
+    }
+  }
+  __name(cleanExploitVulnerabilityGM, "cleanExploitVulnerabilityGM");
+
+  // src/main.js
+  Hooks.once("init", () => {
+    game.modules.get(MODULE_ID).api = {
+      macros: {
+        exploitVulnerability,
+        esotericCheck,
+        groupPerception,
+        identify,
+        ripImaginarium,
+        marshalInspiration
+      }
+    };
+    game.settings.register(MODULE_ID, "jquery", {
+      name: "Disable JQuery Animations",
+      hint: "Will cancel sliding animations on different parts of the UI.",
+      type: Boolean,
+      default: false,
+      config: true,
+      scope: "client",
+      onChange: setJQueryFx
+    });
+  });
+  Hooks.once("ready", () => {
+    if (game.user.isGM) {
+      socketOn(onPacketReceived);
+    }
+    if (getSetting("jquery"))
+      setJQueryFx(true);
+  });
+  function setJQueryFx(disabled) {
+    jQuery.fx.off = disabled;
+  }
+  __name(setJQueryFx, "setJQueryFx");
+  function onPacketReceived(packet) {
+    if (packet.type === "exploit-vulnerability")
+      exploitVulnerabilityGM(packet);
+    else if (packet.type === "clean-exploit-vulnerability")
+      cleanExploitVulnerabilityGM();
+  }
+  __name(onPacketReceived, "onPacketReceived");
+})();
 //# sourceMappingURL=main.js.map
