@@ -3,6 +3,7 @@ import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
 import { marshalInspiration } from './macros/marshal'
 import { groupPerception } from './macros/perception'
+import { sandSnatcher } from './macros/snatcher'
 import { cleanExploitVulnerabilityGM, exploitVulnerability, exploitVulnerabilityGM } from './macros/vulnerability'
 import { MODULE_ID, getSetting, socketOn } from './module'
 
@@ -15,6 +16,7 @@ Hooks.once('init', () => {
             identify,
             ripImaginarium,
             marshalInspiration,
+            sandSnatcher,
         },
     }
 
