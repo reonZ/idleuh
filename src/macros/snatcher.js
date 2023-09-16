@@ -6,11 +6,6 @@ export function sandSnatcher(event, actor) {
 
     const target = game.user.targets.first()?.actor
 
-    if (!target?.isOfType('creature')) {
-        ui.notifications.warn('You need to target a creature')
-        return
-    }
-
     actor.getStatistic('impulse').roll({
         event,
         label: 'Sand Snatcher - Grapple',
@@ -18,7 +13,7 @@ export function sandSnatcher(event, actor) {
         dc: {
             slug: 'fortitude',
             label: 'Fortitude DC',
-            value: target.saves.fortitude.dc.value,
+            value: target?.saves.fortitude.dc.value,
         },
         traits: ['attack', 'impulse', 'kineticist'],
         extraRollNotes: [
