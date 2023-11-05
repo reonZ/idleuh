@@ -1,4 +1,5 @@
 import { esotericCheck } from './macros/esoteric'
+import { extractElement } from './macros/extract'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
 import { marshalInspiration } from './macros/marshal'
@@ -17,6 +18,7 @@ Hooks.once('init', () => {
             ripImaginarium,
             marshalInspiration,
             sandSnatcher,
+            extractElement,
         },
     }
 

@@ -1,6 +1,16 @@
+import { findItemWithSourceId } from '../module'
+
+const FEAT_UUID = 'Compendium.pf2e.feats-srd.Item.40mZVDnIP5qBNhTH'
+
 export function sandSnatcher(event, actor) {
     if (!actor?.isOfType('character')) {
         ui.notifications.warn('You need to select a character')
+        return
+    }
+
+    const feat = findItemWithSourceId(actor, FEAT_UUID, ['feat'])
+    if (!feat) {
+        ui.notifications.warn('Your selected character needs to have the feat <strong>Sand Snatcher</strong>')
         return
     }
 
