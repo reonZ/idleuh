@@ -16,12 +16,12 @@
         "minimum": "11.301",
         "verified": "11"
     },
-    "version": "1.31.0",
+    "version": "1.32.0",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/1.31.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/1.32.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
     "styles": [
@@ -43,45 +43,63 @@
     "packs": [
         {
             "name": "actions",
-            "label": "Idleuh (actions)",
+            "label": "Actions",
             "system": "pf2e",
             "path": "packs/idleuh-actions.db",
             "type": "Item"
         },
         {
             "name": "effects",
-            "label": "Idleuh (effects)",
+            "label": "Effects",
             "system": "pf2e",
             "path": "packs/idleuh-effects.db",
             "type": "Item"
         },
         {
             "name": "equipment",
-            "label": "Idleuh (equipment)",
+            "label": "Equipment",
             "system": "pf2e",
             "path": "packs/idleuh-equipment.db",
             "type": "Item"
         },
         {
             "name": "feats",
-            "label": "Idleuh (feats)",
+            "label": "Feats",
             "system": "pf2e",
             "path": "packs/idleuh-feats.db",
             "type": "Item"
         },
         {
             "name": "gm-macros",
-            "label": "Idleuh (gm macros)",
+            "label": "GM Macros",
             "system": "pf2e",
             "path": "packs/idleuh-gm-macros.db",
-            "type": "Macro"
+            "type": "Macro",
+            "ownership": {
+                "PLAYER": "NONE",
+                "ASSISTANT": "OWNER"
+            }
         },
         {
             "name": "players-macros",
-            "label": "Idleuh (players macros)",
+            "label": "Players Macros",
             "system": "pf2e",
             "path": "packs/idleuh-players-macros.db",
             "type": "Macro"
+        }
+    ],
+    "packFolders": [
+        {
+            "name": "Idleuh",
+            "sorting": "m",
+            "packs": [
+                "actions",
+                "effects",
+                "equipment",
+                "feats",
+                "gm-macros",
+                "players-macros"
+            ]
         }
     ]
 }
