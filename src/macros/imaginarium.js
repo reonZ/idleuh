@@ -12,14 +12,14 @@ export async function ripImaginarium(actor) {
 
     const level = Math.floor(actor.level / 2) || 1
     const pack = game.packs.get(packId)
-    const index = await pack.getIndex({ fields: ['system.level.value', 'system.traits', 'system.category.value'] })
+    const index = await pack.getIndex({ fields: ['system.level.value', 'system.traits', 'system.ritual'] })
 
     const spells = index.filter(
         x =>
             x.system.level.value <= level &&
             !x.system.traits.value.includes('cantrip') &&
-            x.system.category.value !== 'ritual' &&
-            x.system.category.value !== 'focus' &&
+            !x.system.traits.value.includes('focus') &&
+            !x.system.ritual &&
             x.system.traits.rarity === 'common'
     )
 
