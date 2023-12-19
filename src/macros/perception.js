@@ -1,4 +1,4 @@
-const proficiency = ['trained', 'expert', 'master', 'legendary', 'untrained']
+const proficiency = ['untrained', 'trained', 'expert', 'master', 'legendary']
 
 export async function groupPerception() {
     if (!game.user.isGM) {
@@ -6,32 +6,23 @@ export async function groupPerception() {
         return
     }
 
-    let result = '<hr>'
+    let content = ''
 
-    const tokens = canvas.tokens
-    for (const token of tokens.placeables) {
-        const actor = token.actor
-        if (!actor || !actor.isOfType('character', 'npc') || !actor.hasPlayerOwner || !actor.attributes.perception) continue
-        result += await rollPerception(actor)
-    }
+    const party = game.actors.party
+    const actors = party?.members ?? []
 
-    ChatMessage.create({ content: result, flavor: 'Group Perception Checks', whisper: [game.user.id] })
-}
+    await Promise.all(
+        actors.map(async actor => {
+            const roll = await actor.perception.roll({ createMessage: false })
+            const die = roll.dice[0].total
 
-async function rollPerception(actor) {
-    const perception = actor.attributes.perception
-    const check = new game.pf2e.CheckModifier('', perception)
-    const roll = await game.pf2e.Check.roll(check, { actor: actor, type: 'skill-check', createMessage: false, skipDialog: true })
-    if (!roll) return ''
+            content += `<div style="display:flex;justify-content:space-between;" title="${roll.result}">`
+            content += `<span>${actor.name} (${proficiency[actor.perception.rank]})</span><span`
+            if (die == 20) content += ' style="color: green;"'
+            else if (die == 1) content += ' style="color: red;"'
+            content += `>${roll.total}</span></div>`
+        })
+    )
 
-    const rank = proficiency[(perception.rank ?? 1) - 1]
-    const die = roll.dice[0].total
-    if (die === undefined) return ''
-
-    let result = `<div style="display:flex;justify-content:space-between;" title="${roll.result}">`
-    result += `<span>${actor.name} (${rank})</span><span`
-    if (die == 20) result += ' style="color: green;"'
-    else if (die == 1) result += ' style="color: red;"'
-
-    return `${result}>${roll.total}</span></div>`
+    if (content) ChatMessage.create({ content, flavor: 'Group Perception Checks<hr>', whisper: [game.user.id] })
 }
