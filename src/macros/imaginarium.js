@@ -31,7 +31,7 @@ export async function ripImaginarium(actor) {
     let extraMessage = ''
     const scroll = await createSpellScroll(uuid, level)
     if (scroll) {
-        scroll.name = scroll.name + ' *'
+        scroll.name = `${scroll.name} *`
         const [item] = await actor.createEmbeddedDocuments('Item', [scroll])
         extraMessage = ' and received the following:'
         messageUUID = item.uuid

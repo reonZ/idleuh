@@ -3,8 +3,10 @@ import { extractElement } from './macros/extract'
 import { identify } from './macros/identify'
 import { ripImaginarium } from './macros/imaginarium'
 import { marshalInspiration } from './macros/marshal'
+import { thermalNimbus } from './macros/nimbus'
 import { groupPerception } from './macros/perception'
 import { sandSnatcher } from './macros/snatcher'
+import { spikeSkinDamage, spikeSkinDuration } from './macros/spike'
 import { cleanExploitVulnerabilityGM, exploitVulnerability, exploitVulnerabilityGM } from './macros/vulnerability'
 import { MODULE_ID, getSetting, socketOn } from './module'
 
@@ -19,6 +21,9 @@ Hooks.once('init', () => {
             marshalInspiration,
             sandSnatcher,
             extractElement,
+            thermalNimbus,
+            spikeSkinDuration,
+            spikeSkinDamage,
         },
     }
 
