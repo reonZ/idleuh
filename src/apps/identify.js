@@ -1,5 +1,6 @@
 import { templatePath } from '../module'
 import { getItemIdentificationDCs } from '../pf2e'
+import * as R from 'remeda'
 
 export class Identify extends Application {
     constructor(items, options) {
@@ -8,7 +9,7 @@ export class Identify extends Application {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return mergeObject(Application.defaultOptions, {
             id: 'idleuh-identify',
             title: 'Identify Items',
             template: templatePath('identify.html'),
@@ -54,33 +55,22 @@ export class Identify extends Application {
 
     async #onChecks(event) {
         const item = await getItemFromEvent(event)
-        if (!item) return
-
-        const itemImg = item.system.identification.unidentified.img
-        const itemName = item.system.identification.unidentified.name
         const identifiedName = item.system.identification.identified.name
-
-        const notMatchingTraditionModifier = game.settings.get('pf2e', 'identifyMagicNotMatchingTraditionModifier')
-        const proficiencyWithoutLevel = game.settings.get('pf2e', 'proficiencyVariant') === 'ProficiencyWithoutLevel'
-        const dcs = getItemIdentificationDCs(item, { proficiencyWithoutLevel, notMatchingTraditionModifier })
-
-        const skills = Object.entries(dcs).map(([slug, dc]) => {
-            slug = slug === 'dc' ? 'crafting' : slug
-            const name = game.i18n.localize(CONFIG.PF2E.skillList[slug])
-            return { slug, name, dc }
+        const dcs = getItemIdentificationDCs(item, {
+            pwol: game.pf2e.settings.variants.pwol.enabled,
+            notMatchingTraditionModifier: game.settings.get('pf2e', 'identifyMagicNotMatchingTraditionModifier'),
         })
-
-        const actionOption = item.isMagical ? 'action:identify-magic' : item.isAlchemical ? 'action:identify-alchemy' : null
+        const action = item.isMagical ? 'identify-magic' : item.isAlchemical ? 'identify-alchemy' : null
 
         const content = await renderTemplate('systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs', {
-            itemImg,
-            itemName,
             identifiedName,
-            rollOptions: ['concentrate', 'exploration', 'secret', actionOption].filter(Boolean),
-            skills,
+            action,
+            skills: R.omit(dcs, ['dc']),
+            unidentified: item.system.identification.unidentified,
+            uuid: item.uuid,
         })
 
-        await CONFIG.ChatMessage.documentClass.create({ user: game.user.id, content })
+        await ChatMessage.implementation.create({ user: game.user.id, content })
     }
 
     async #onIdentify(event) {
