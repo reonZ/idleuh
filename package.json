@@ -15,7 +15,6 @@
     },
     "homepage": "https://github.com/reonZ/idleuh#readme",
     "devDependencies": {
-        "@biomejs/biome": "1.5.x",
         "esbuild": "0.x"
     },
     "dependencies": {

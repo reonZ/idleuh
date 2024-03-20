@@ -1,5 +1,3 @@
 # FoundryVTT Idleuh
 
-# CHANGELOG
-
-You can see the changelog [HERE](./CHANGELOG.md)
+not for public use
