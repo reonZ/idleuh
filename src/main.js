@@ -17,6 +17,16 @@ import {
 registerModule("idleuh");
 
 Hooks.once("init", () => {
+	if (!Array.prototype.toReversed) {
+		Array.prototype.toReversed = function() {
+			const reversed = []
+			for (let i = this.length -1; i >= 0; i--) {
+				reversed.push(this[i])
+			}
+			return reversed
+		}
+	}
+
 	game.modules.get(MODULE.id).api = {
 		macros: {
 			exploitVulnerability,
