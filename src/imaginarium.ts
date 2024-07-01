@@ -3,7 +3,7 @@ import { createChatLink, createConsumableFromSpell, getItemWithSourceId } from "
 const packId = "pf2e.spells-srd";
 const IMAGINARIUM = "Item.dcALVAyJbYSovzqt";
 
-async function ripImaginarium(actor: Maybe<ActorPF2e>) {
+async function ripImaginarium(actor?: ActorPF2e) {
     const pack = game.packs.get<CompendiumCollection<SpellPF2e<null>>>(packId);
     if (!pack) return;
 
