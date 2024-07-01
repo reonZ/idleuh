@@ -7,8 +7,6 @@ async function ripImaginarium(actor: Maybe<ActorPF2e>) {
     const pack = game.packs.get<CompendiumCollection<SpellPF2e<null>>>(packId);
     if (!pack) return;
 
-    actor ??= game.user.character;
-
     if (!actor?.isOfType("character")) {
         return ui.notifications.warn("You must select a character with the Imaginarium.");
     }
