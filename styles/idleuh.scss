@@ -3,7 +3,7 @@
         text-align: center;
     }
 
-    [data-item] {
+    .item {
         display: flex;
         padding: 4px 6px;
         border-radius: 2px;
@@ -44,16 +44,16 @@
             color: red;
         }
 
-        &.checked :is([data-action='checks'], [data-action='identify']),
-        &.identified :is([data-action='checks'], [data-action='remove']),
-        &:not(.identified) [data-action='chat'] {
+        &.checked :is([data-action="checks"], [data-action="identify"]),
+        &.identified :is([data-action="checks"], [data-action="remove"]),
+        &:not(.identified) [data-action="chat"] {
             color: grey;
             text-shadow: none;
             pointer-events: none;
         }
     }
 
-    button {
-        margin-top: 0.5em;
+    [data-action="reset"] {
+        margin-top: 1em;
     }
 }

@@ -1,12 +1,10 @@
 .git/
 node_modules/
 releases/
-ignore.txt
-release.mjs
+scripts/
 *.code-workspace
-tsconfig.json
-jsconfig.json
-webpack*.*
+release.mjs
+ignore.txt
 *.log
 CURRENT
 LOCK

@@ -1,23 +1,23 @@
 {
     "name": "idleuh",
     "scripts": {
-        "build": "esbuild src/main.js --bundle --keep-names --minify --sourcemap --outdir=scripts",
-        "dev": "esbuild src/main.js --bundle --keep-names --watch --sourcemap --outdir=scripts"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/reonZ/idleuh.git"
+        "build": "esbuild src/main.ts --bundle --keep-names --minify --sourcemap --outdir=scripts",
+        "dev": "esbuild src/main.ts --bundle --keep-names --watch --sourcemap --outdir=scripts"
     },
     "author": "Idle",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/reonZ/idleuh/issues"
+    "homepage": "https://github.com/reonZidleuh#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/reonZidleuh.git"
     },
-    "homepage": "https://github.com/reonZ/idleuh#readme",
+    "bugs": {
+        "url": "https://github.com/reonZidleuh/issues"
+    },
     "devDependencies": {
-        "esbuild": "0.x"
+        "esbuild": "^0.20.1",
+        "typescript": "5.3.3"
     },
     "dependencies": {
-        "module-api": "file:../../../../dev/module-api"
+        "foundry-pf2e": "file:../../../../dev/foundry-pf2e"
     }
 }

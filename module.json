@@ -1,7 +1,6 @@
 {
     "id": "idleuh",
     "title": "Idleuh",
-    "author": "Idle",
     "description": "Des trucs pour Corsaire",
     "authors": [
         {
@@ -9,24 +8,20 @@
             "discord": "Idle#3251"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
-        "minimum": "11.301",
-        "verified": "11"
+        "minimum": "12.328",
+        "verified": "12.328",
+        "maximum": "12"
     },
     "version": "1.40.0",
-    "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
     "download": "https://github.com/reonZ/idleuh/releases/download/1.40.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
-    "styles": [
-        "styles/styles.css"
-    ],
+    "styles": ["styles/idleuh.css"],
     "socket": true,
     "relationships": {
         "systems": [
@@ -35,7 +30,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "5.0.0-beta2"
+                    "minimum": "6.0.4"
                 }
             }
         ]
