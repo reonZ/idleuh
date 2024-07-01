@@ -1,6 +1,7 @@
 import { MODULE, getSetting, registerSetting } from "foundry-pf2e";
 import { identify } from "./identify";
 import { groupPerception } from "./perception";
+import { ripImaginarium } from "./imaginarium";
 
 MODULE.register("idleuh", "Idleuh");
 
@@ -29,6 +30,7 @@ Hooks.once("init", () => {
         macros: {
             identify,
             groupPerception,
+            ripImaginarium,
         },
     };
 });
