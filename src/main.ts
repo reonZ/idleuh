@@ -4,6 +4,7 @@ import { ripImaginarium } from "./imaginarium";
 import { groupPerception } from "./perception";
 import { thermalNimbus } from "./thermal-nimbus";
 import { spikeSkinDamage, spikeSkinDuration } from "./spike-skin";
+import { selectVictim } from "./select-victim";
 
 MODULE.register("idleuh", "Idleuh");
 
@@ -36,6 +37,7 @@ Hooks.once("init", () => {
             thermalNimbus,
             spikeSkinDamage,
             spikeSkinDuration,
+            selectVictim,
         },
     };
 });
