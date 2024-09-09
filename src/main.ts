@@ -6,7 +6,6 @@ import {
     htmlQuery,
     registerSetting,
 } from "foundry-pf2e";
-import { identify } from "./identify";
 import { ripImaginarium } from "./imaginarium";
 import { groupPerception } from "./perception";
 import { selectVictim } from "./select-victim";
@@ -38,7 +37,6 @@ Hooks.once("init", () => {
 
     MODULE.current.api = {
         macros: {
-            identify,
             groupPerception,
             ripImaginarium,
             thermalNimbus,
