@@ -1,6 +1,6 @@
 import { getFirstActiveToken, R } from "foundry-pf2e";
 
-async function selectVictim() {
+async function selectVictim(event: Event) {
     const party = game.actors.party?.members ?? [];
 
     const validActor = (actor: Maybe<ActorPF2e>) => {
