@@ -6,6 +6,7 @@ import {
     htmlQuery,
     registerSetting,
 } from "foundry-pf2e";
+import { useHeroAction } from "./hero-action";
 import { ripImaginarium } from "./imaginarium";
 import { groupPerception } from "./perception";
 import { selectVictim } from "./select-victim";
@@ -43,6 +44,7 @@ Hooks.once("init", () => {
             spikeSkinDamage,
             spikeSkinDuration,
             selectVictim,
+            useHeroAction,
         },
     };
 });
