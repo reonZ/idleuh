@@ -1,4 +1,4 @@
-import { rollDamage } from "./damage";
+import { rollDamageFromFormula } from "foundry-pf2e";
 
 const FEAT_UUID = "Compendium.pf2e.feats-srd.Item.XJCsa3UbQtsKcqve";
 
@@ -13,7 +13,10 @@ async function thermalNimbus(actor?: ActorPF2e, token?: TokenPF2e) {
     }
 
     const formula = `${Math.floor(actor.level / 2)}[fire]`;
-    await rollDamage(actor, item, formula, token);
+    await rollDamageFromFormula(formula, {
+        item,
+        origin: { actor, token: token?.document },
+    });
 }
 
 export { thermalNimbus };

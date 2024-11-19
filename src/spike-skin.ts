@@ -1,4 +1,4 @@
-import { getItemWithSourceId, hasItemWithSourceId } from "foundry-pf2e";
+import { getItemWithSourceId, hasItemWithSourceId, rollDamageFromFormula } from "foundry-pf2e";
 import { rollDamage } from "./damage";
 
 const effectName = "<strong>Spike Skin</strong> effect";
@@ -33,7 +33,10 @@ async function spikeSkinDamage(actor?: ActorPF2e, token?: TokenPF2e) {
 
     const formula = `${Math.floor((actor.level - 8) / 2) * 2 + 2}[piercing]`;
 
-    await rollDamage(actor, item, formula, token);
+    await rollDamageFromFormula(formula, {
+        item,
+        origin: { actor, token: token?.document },
+    });
 }
 
 export { spikeSkinDamage, spikeSkinDuration };

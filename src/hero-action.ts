@@ -8,13 +8,13 @@ async function useHeroAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
         !item.isOfType("action", "feat")
     ) {
         ui.notifications.warn("This is not how this macro is supposed to work.");
-        return false;
+        return;
     }
 
     const heroPoints = actor.heroPoints.value;
     if (!heroPoints) {
         ui.notifications.warn(`<strong>${actor.name}</strong> doesn't have any Hero Point left.`);
-        return false;
+        return;
     }
 
     await actor.update({ "system.resources.heroPoints.value": heroPoints - 1 });
@@ -37,8 +37,6 @@ async function useHeroAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
 
     message.updateSource({ content: content.innerHTML });
     getDocumentClass("ChatMessage").create(message.toObject(), { renderSheet: false });
-
-    return false;
 }
 
 export { useHeroAction };

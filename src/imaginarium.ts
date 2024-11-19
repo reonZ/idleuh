@@ -12,7 +12,6 @@ async function ripImaginarium(actor?: ActorPF2e) {
     }
 
     const book = getItemWithSourceId(actor, IMAGINARIUM, "equipment");
-    console.log(book);
     if (!book || book.system.equipped.carryType === "dropped") {
         return ui.notifications.warn(
             "This character doesn't have the Imaginarium in their possession"
@@ -48,6 +47,7 @@ async function ripImaginarium(actor?: ActorPF2e) {
     }
 
     scroll.name = `${scroll.name} *`;
+    foundry.utils.setProperty(scroll, "system.price.value", {});
 
     const [item] = await actor.createEmbeddedDocuments("Item", [scroll]);
     const link = createChatLink(spell, { label: item.name });
