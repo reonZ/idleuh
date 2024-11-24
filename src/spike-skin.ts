@@ -1,5 +1,11 @@
-import { getItemWithSourceId, hasItemWithSourceId, rollDamageFromFormula } from "foundry-pf2e";
-import { rollDamage } from "./damage";
+import {
+    ActorPF2e,
+    FeatPF2e,
+    getItemWithSourceId,
+    hasItemWithSourceId,
+    rollDamageFromFormula,
+    TokenPF2e,
+} from "module-helpers";
 
 const effectName = "<strong>Spike Skin</strong> effect";
 

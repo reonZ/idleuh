@@ -1,4 +1,4 @@
-import { rollDamageFromFormula } from "foundry-pf2e";
+import { ActorPF2e, rollDamageFromFormula, TokenPF2e } from "module-helpers";
 
 const FEAT_UUID = "Compendium.pf2e.feats-srd.Item.XJCsa3UbQtsKcqve";
 

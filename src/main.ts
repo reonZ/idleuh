@@ -1,4 +1,5 @@
 import {
+    ChatMessagePF2e,
     MODULE,
     R,
     createHTMLElement,
@@ -8,13 +9,13 @@ import {
     registerSetting,
     userIsActiveGM,
     userIsGM,
-} from "foundry-pf2e";
-import { useHeroAction } from "./hero-action";
+} from "module-helpers";
 import { ripImaginarium } from "./imaginarium";
 import { groupPerception } from "./perception";
 import { selectVictim } from "./select-victim";
 import { spikeSkinDamage, spikeSkinDuration } from "./spike-skin";
 import { thermalNimbus } from "./thermal-nimbus";
+import { useFocusAction, useHeroAction, useManBatStance } from "./use-macro";
 
 MODULE.register("idleuh", "Idleuh");
 
@@ -62,6 +63,8 @@ Hooks.once("init", () => {
             spikeSkinDuration,
             selectVictim,
             useHeroAction,
+            useFocusAction,
+            useManBatStance,
         },
     };
 
@@ -83,7 +86,7 @@ async function onPreCreateChatMessage(message: ChatMessagePF2e) {
     ChatMessage.deleteDocuments(ids);
 }
 
-Hooks.on("renderSettingsConfig", (app: SettingsConfig, $html: JQuery, data: SettingsConfigData) => {
+Hooks.on("renderSettingsConfig", (app, $html, data) => {
     const html = $html[0];
 
     const setGroupName = (group: Maybe<HTMLElement>, scope: "client" | "world") => {
@@ -107,7 +110,8 @@ Hooks.on("renderSettingsConfig", (app: SettingsConfig, $html: JQuery, data: Sett
             setGroupName(group, setting.scope);
         }
 
-        for (const menu of category.menus) {
+        const menus = category.menus as (SettingSubmenuConfig & { key: string })[];
+        for (const menu of menus) {
             const btn = htmlQuery(section, `[data-key="${menu.key}"]`);
             const group = htmlClosest(btn, ".form-group");
             setGroupName(group, menu.restricted ? "world" : "client");

@@ -1,4 +1,11 @@
-import { createChatLink, createConsumableFromSpell, getItemWithSourceId } from "foundry-pf2e";
+import {
+    ActorPF2e,
+    createChatLink,
+    createConsumableFromSpell,
+    getItemWithSourceId,
+    OneToTen,
+    SpellPF2e,
+} from "module-helpers";
 
 const packId = "pf2e.spells-srd";
 const IMAGINARIUM = "Item.dcALVAyJbYSovzqt";
