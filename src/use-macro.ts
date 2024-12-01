@@ -1,4 +1,15 @@
-import { ActorPF2e, createHTMLElement, EffectPF2e, htmlQuery, ItemPF2e } from "module-helpers";
+import {
+    ActorPF2e,
+    addStance,
+    CharacterPF2e,
+    createHTMLElement,
+    getItemWithSourceId,
+    getStanceEffects,
+    htmlQuery,
+    ItemPF2e,
+} from "module-helpers";
+
+const MAN_BAT_UUID = "Compendium.idleuh.effects.Item.B0Cdt3bvfz8LW6QK";
 
 async function useResourceAction(
     resource: UsableResource,
@@ -71,7 +82,7 @@ async function useResourceAction(
     return ChatMessagePF2e.create(message.toObject(), { renderSheet: false });
 }
 
-function useHeroAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
+function useHeroAction(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
     return useResourceAction("heroPoints", actor, item, event);
 }
 
@@ -79,17 +90,22 @@ function useFocusAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
     return useResourceAction("focus", actor, item, event);
 }
 
-async function useManBatStance(actor: ActorPF2e, item: ItemPF2e, event: Event) {
-    const effect = (await fromUuid(
-        "Compendium.idleuh.effects.Item.B0Cdt3bvfz8LW6QK"
-    )) as EffectPF2e;
-    const source = effect?.toObject();
-    if (!source) return;
+async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
+    const toDelete = getStanceEffects(actor).map(({ effectID }) => effectID);
+    const exist = getItemWithSourceId(actor, MAN_BAT_UUID, "effect");
 
-    const message = await useResourceAction("focus", actor, item, event);
-    if (!message) return;
+    if (exist) {
+        toDelete.push(exist.id);
+    } else {
+        const message = await useResourceAction("focus", actor, item, event);
+        if (message) {
+            await addStance(actor, MAN_BAT_UUID, false);
+        }
+    }
 
-    return actor.createEmbeddedDocuments("Item", [source]);
+    if (toDelete.length) {
+        actor.deleteEmbeddedDocuments("Item", toDelete);
+    }
 }
 
 type UsableResource = "focus" | "heroPoints";
