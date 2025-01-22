@@ -17,7 +17,7 @@ import { spikeSkinDamage, spikeSkinDuration } from "./spike-skin";
 import { thermalNimbus } from "./thermal-nimbus";
 import { useFocusAction, useHeroAction, useManBatStance } from "./use-macro";
 
-MODULE.register("idleuh", "Idleuh");
+MODULE.register("idleuh");
 
 Hooks.once("init", () => {
     if (!Array.prototype.toReversed) {
