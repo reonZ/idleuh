@@ -12,10 +12,13 @@ import { groupPerception } from "./perception";
 import { selectVictim } from "./select-victim";
 import { onRenderSettingsConfig } from "./settings";
 import { spikeSkinDamage, spikeSkinDuration } from "./spike-skin";
+import { setupTeleport } from "./teleport";
 import { thermalNimbus } from "./thermal-nimbus";
 import { useFocusAction, useHeroAction, useManBatStance } from "./use-macro";
 
 MODULE.register("idleuh");
+
+setupTeleport();
 
 Hooks.once("init", () => {
     if (!Array.prototype.toReversed) {
