@@ -2,10 +2,7 @@ import {
     ChatMessagePF2e,
     MODULE,
     R,
-    createHTMLElement,
     getSetting,
-    htmlClosest,
-    htmlQuery,
     registerSetting,
     userIsActiveGM,
     userIsGM,
@@ -13,6 +10,7 @@ import {
 import { ripImaginarium } from "./imaginarium";
 import { groupPerception } from "./perception";
 import { selectVictim } from "./select-victim";
+import { onRenderSettingsConfig } from "./settings";
 import { spikeSkinDamage, spikeSkinDuration } from "./spike-skin";
 import { thermalNimbus } from "./thermal-nimbus";
 import { useFocusAction, useHeroAction, useManBatStance } from "./use-macro";
@@ -73,6 +71,8 @@ Hooks.once("init", () => {
     }
 });
 
+Hooks.on("renderSettingsConfig", onRenderSettingsConfig);
+
 async function onPreCreateChatMessage(message: ChatMessagePF2e) {
     if (!userIsActiveGM()) return;
 
@@ -85,47 +85,6 @@ async function onPreCreateChatMessage(message: ChatMessagePF2e) {
 
     ChatMessage.deleteDocuments(ids);
 }
-
-Hooks.on("renderSettingsConfig", (app, $html, data) => {
-    const html = $html[0];
-
-    const setGroupName = (group: Maybe<HTMLElement>, scope: "client" | "world") => {
-        const label = htmlQuery(group, ":scope > label");
-        const icon = createHTMLElement("span", {
-            dataset: {
-                tooltip: scope.capitalize(),
-                tooltipDirection: "UP",
-            },
-            innerHTML: scope === "world" ? "🌎 " : "👤 ",
-        });
-        label?.prepend(icon);
-    };
-
-    for (const category of data.categories) {
-        const section = htmlQuery(html, `section.category[data-category="${category.id}"]`);
-        if (!section) continue;
-
-        for (const setting of category.settings) {
-            const group = htmlQuery(section, `[data-setting-id="${setting.id}"]`);
-            setGroupName(group, setting.scope);
-        }
-
-        const menus = category.menus as (SettingSubmenuConfig & { key: string })[];
-        for (const menu of menus) {
-            const btn = htmlQuery(section, `[data-key="${menu.key}"]`);
-            const group = htmlClosest(btn, ".form-group");
-            setGroupName(group, menu.restricted ? "world" : "client");
-        }
-    }
-
-    const inputs = html.querySelectorAll("input[type='range'], input[type='number']");
-    for (const input of inputs) {
-        input.addEventListener("wheel", (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-        });
-    }
-});
 
 function setJQueryFx(disabled: boolean) {
     jQuery.fx.off = disabled;
