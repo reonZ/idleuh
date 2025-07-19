@@ -8,7 +8,9 @@
             "discord": "idleatre"
         }
     ],
-    "esmodules": ["scripts/main.js"],
+    "esmodules": [
+        "scripts/main.js"
+    ],
     "compatibility": {
         "minimum": "13.344",
         "verified": "13.346",
@@ -21,7 +23,9 @@
     "download": "https://github.com/reonZ/idleuh/releases/download/3.0.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
-    "styles": ["styles/idleuh.css"],
+    "styles": [
+        "styles/idleuh.css"
+    ],
     "socket": true,
     "relationships": {
         "systems": [
