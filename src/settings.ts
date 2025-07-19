@@ -1,38 +1,46 @@
-import { createHTMLElement, htmlClosest, htmlQuery } from "module-helpers";
+import {
+    createHTMLElement,
+    htmlClosest,
+    htmlQuery,
+    R,
+    RenderSettingsConfigOptions,
+} from "module-helpers";
 
 function onRenderSettingsConfig(
     app: SettingsConfig,
-    $html: JQuery,
-    data: ReturnType<SettingsConfig["_prepareCategoryData"]>
+    html: HTMLFormElement,
+    options: RenderSettingsConfigOptions
 ) {
-    const html = $html[0];
+    for (const category of R.values(options.categories)) {
+        const tab = htmlQuery(
+            html,
+            `[data-application-part="main"] [data-group="categories"][data-tab="${category.id}"]`
+        );
 
-    const setGroupName = (group: Maybe<HTMLElement>, scope: "client" | "world") => {
-        const label = htmlQuery(group, ":scope > label");
-        const icon = createHTMLElement("span", {
-            dataset: {
-                tooltip: scope.capitalize(),
-                tooltipDirection: "UP",
-            },
-            innerHTML: scope === "world" ? "🌎 " : "👤 ",
-        });
-        label?.prepend(icon);
-    };
+        for (const entry of category.entries) {
+            const setting = entry.menu
+                ? game.settings.menus.get(entry.key)
+                : game.settings.settings.get(entry.field.name);
 
-    for (const category of data.categories) {
-        const section = htmlQuery(html, `section.category[data-category="${category.id}"]`);
-        if (!section) continue;
+            if (!setting) continue;
 
-        for (const setting of category.settings) {
-            const group = htmlQuery(section, `[data-setting-id="${setting.id}"]`);
-            setGroupName(group, setting.scope);
-        }
+            const scope =
+                "scope" in setting ? setting.scope : setting.restricted ? "world" : "user";
+            const input = entry.menu
+                ? htmlQuery(tab, `[data-key="${entry.key}"]`)
+                : htmlQuery(tab, `[name="${entry.field.name}"]`);
+            const group = htmlClosest(input, ".form-group");
+            const label = htmlQuery(group, ":scope > label");
 
-        const menus = category.menus as (SettingSubmenuConfig & { key: string })[];
-        for (const menu of menus) {
-            const btn = htmlQuery(section, `[data-key="${menu.key}"]`);
-            const group = htmlClosest(btn, ".form-group");
-            setGroupName(group, menu.restricted ? "world" : "client");
+            const icon = createHTMLElement("span", {
+                dataset: {
+                    tooltip: scope.capitalize(),
+                    tooltipDirection: "UP",
+                },
+                content: scope === "world" ? "🌎 " : "👤 ",
+            });
+
+            label?.prepend(icon);
         }
     }
 

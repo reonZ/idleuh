@@ -8,24 +8,20 @@
             "discord": "idleatre"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
-        "minimum": "12.331",
-        "verified": "12.331",
-        "maximum": "12"
+        "minimum": "13.344",
+        "verified": "13.346",
+        "maximum": "13"
     },
-    "version": "2.6.0",
+    "version": "3.0.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/2.6.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/3.0.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
-    "styles": [
-        "styles/idleuh.css"
-    ],
+    "styles": ["styles/idleuh.css"],
     "socket": true,
     "relationships": {
         "systems": [
@@ -34,7 +30,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "6.7.0"
+                    "minimum": "7.2.3"
                 }
             }
         ]

@@ -13,7 +13,8 @@ async function thermalNimbus(actor?: ActorPF2e, token?: TokenPF2e) {
     }
 
     const formula = `${Math.floor(actor.level / 2)}[fire]`;
-    await rollDamageFromFormula(formula, {
+
+    rollDamageFromFormula(formula, {
         item,
         origin: { actor, token: token?.document },
     });

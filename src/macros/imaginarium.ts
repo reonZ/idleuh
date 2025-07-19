@@ -2,7 +2,7 @@ import {
     ActorPF2e,
     createChatLink,
     createConsumableFromSpell,
-    getItemWithSourceId,
+    findItemWithSourceId,
     OneToTen,
     SpellPF2e,
 } from "module-helpers";
@@ -18,7 +18,7 @@ async function ripImaginarium(actor?: ActorPF2e) {
         return ui.notifications.warn("You must select a character with the Imaginarium.");
     }
 
-    const book = getItemWithSourceId(actor, IMAGINARIUM, "equipment");
+    const book = findItemWithSourceId(actor, IMAGINARIUM, "equipment");
     if (!book || book.system.equipped.carryType === "dropped") {
         return ui.notifications.warn(
             "This character doesn't have the Imaginarium in their possession"

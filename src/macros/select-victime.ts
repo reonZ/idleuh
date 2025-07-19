@@ -43,8 +43,7 @@ async function selectVictim(event: Event) {
         })
         .join("");
 
-    user.updateTokenTargets([victim.id]);
-    user.broadcastActivity({ targets: [victim.id] });
+    canvas.tokens.setTargets([victim.id]);
 
     getDocumentClass("ChatMessage").create({
         flavor: "Eeny, meeny, miny, moe",

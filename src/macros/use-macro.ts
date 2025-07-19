@@ -1,12 +1,12 @@
 import {
     ActorPF2e,
-    addStance,
     CharacterPF2e,
+    ChatMessagePF2e,
     createHTMLElement,
-    getItemWithSourceId,
-    getStanceEffects,
+    findItemWithSourceId,
     htmlQuery,
     ItemPF2e,
+    R,
 } from "module-helpers";
 
 const MAN_BAT_UUID = "Compendium.idleuh.effects.Item.B0Cdt3bvfz8LW6QK";
@@ -41,7 +41,7 @@ async function useResourceAction(
     if (!message) return;
 
     const content = createHTMLElement("div", {
-        innerHTML: message.content,
+        content: message.content,
     });
 
     const cardContent = (() => {
@@ -68,7 +68,7 @@ async function useResourceAction(
     })();
 
     const h4 = createHTMLElement("h4", {
-        innerHTML: `Spent one of their ${resourceName}`,
+        content: `Spent one of their ${resourceName}`,
     });
 
     cardContent.prepend(h4);
@@ -79,7 +79,9 @@ async function useResourceAction(
 
     const ChatMessagePF2e = getDocumentClass("ChatMessage");
 
-    return ChatMessagePF2e.create(message.toObject(), { renderSheet: false });
+    return ChatMessagePF2e.create(message.toObject() as ChatMessageCreateData<ChatMessagePF2e>, {
+        renderSheet: false,
+    });
 }
 
 function useHeroAction(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
@@ -91,15 +93,19 @@ function useFocusAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
 }
 
 async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
-    const toDelete = getStanceEffects(actor).map(({ effectID }) => effectID);
-    const exist = getItemWithSourceId(actor, MAN_BAT_UUID, "effect");
+    const exist = findItemWithSourceId(actor, MAN_BAT_UUID, "effect");
+    const toDelete = R.pipe(
+        game.hud?.api.getStances(actor) ?? [],
+        R.map(({ effectUUID }) => findItemWithSourceId(actor, effectUUID, "effect")?.id),
+        R.filter(R.isTruthy)
+    );
 
     if (exist) {
         toDelete.push(exist.id);
     } else {
-        const message = await useResourceAction("focus", actor, item, event);
+        const message = await useFocusAction(actor, item, event);
         if (message) {
-            await addStance(actor, MAN_BAT_UUID, false);
+            await game.hud?.api.addStance(actor, MAN_BAT_UUID, false);
         }
     }
 
