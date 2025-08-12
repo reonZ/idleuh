@@ -1,9 +1,11 @@
 import {
     ActorPF2e,
+    addStance,
     CharacterPF2e,
     ChatMessagePF2e,
     createHTMLElement,
     findItemWithSourceId,
+    getStances,
     htmlQuery,
     ItemPF2e,
     R,
@@ -95,7 +97,7 @@ function useFocusAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
 async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
     const exist = findItemWithSourceId(actor, MAN_BAT_UUID, "effect");
     const toDelete = R.pipe(
-        game.hud?.api.getStances(actor) ?? [],
+        getStances(actor) ?? [],
         R.map(({ effectUUID }) => findItemWithSourceId(actor, effectUUID, "effect")?.id),
         R.filter(R.isTruthy)
     );
@@ -105,7 +107,7 @@ async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Even
     } else {
         const message = await useFocusAction(actor, item, event);
         if (message) {
-            await game.hud?.api.addStance(actor, MAN_BAT_UUID, false);
+            await addStance(actor, MAN_BAT_UUID, false);
         }
     }
 
