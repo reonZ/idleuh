@@ -37,7 +37,7 @@ function onRenderSettingsConfig(
                     tooltip: scope.capitalize(),
                     tooltipDirection: "UP",
                 },
-                content: scope === "world" ? "🌎 " : "👤 ",
+                content: scope === "world" ? "🌎 " : scope === "user" ? "👤 " : "💻 ",
             });
 
             label?.prepend(icon);
