@@ -1,0 +1,11 @@
+.sheet.actor {
+    .tab.inventory {
+        [data-item-id][data-actionable-use="true"] {
+            .item-summary {
+                .button-group {
+                    display: none;
+                }
+            }
+        }
+    }
+}
