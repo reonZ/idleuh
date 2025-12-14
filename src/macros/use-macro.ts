@@ -29,7 +29,7 @@ async function useResourceAction(
 
     const resourceName = game.i18n.localize(`PF2E.Actor.Resource.${resource.capitalize()}`);
 
-    const resourcePoints = actor.system.resources[resource]?.value;
+    const resourcePoints = actor.getResource(resource)?.value;
     if (!resourcePoints) {
         ui.notifications.warn(
             `<strong>${actor.name}</strong> doesn't have any ${resourceName} left.`
