@@ -1,3 +1,4 @@
+export * from "./flesh-blaster";
 export * from "./imaginarium";
 export * from "./perception";
 export * from "./select-victime";

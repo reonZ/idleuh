@@ -1,4 +1,5 @@
 import {
+    envisonDoom,
     groupPerception,
     ripImaginarium,
     selectVictim,
@@ -14,6 +15,7 @@ MODULE.register("idleuh");
 
 MODULE.apiExpose({
     macros: {
+        envisonDoom,
         groupPerception,
         ripImaginarium,
         selectVictim,
