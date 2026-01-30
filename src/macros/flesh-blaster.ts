@@ -1,14 +1,11 @@
-import {
-    AbilityItemPF2e,
-    ActorPF2e,
-    getFirstActiveToken,
-    R,
-    rollDamageFromFormula,
-} from "module-helpers";
+import { AbilityItemPF2e, ActorPF2e, getFirstActiveToken, R, rollDamageFromFormula } from "module-helpers";
 
 async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event) {
-    const { plugValue = 0 } =
-        (actor.getFlag("pf2e", "fleshBlaster") as FleshBlasterFlag | undefined) ?? {};
+    if (!actor.isOfType("character", "npc")) {
+        return ui.notifications.warn("Only Characters and NPCs can use this action.");
+    }
+
+    const { plugValue = 0 } = (actor.getFlag("pf2e", "fleshBlaster") as FleshBlasterFlag | undefined) ?? {};
 
     if (plugValue < 2) {
         return ui.notifications.warn("You haven't pushed the beads far enough.");
@@ -24,7 +21,7 @@ async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event
     const targetActor = target?.actor;
 
     const percentage = plugValue === 2 ? 10 : (plugValue - 2) * 25;
-    const value = Math.floor((actor.hitPoints?.max ?? 0) * (percentage / 100));
+    const value = Math.floor(actor.hitPoints.value * (percentage / 100));
     const formula = `${value}[mental]`;
 
     const msg = (await item.toMessage(event, { create: false }))?.toObject() as any;
@@ -40,7 +37,7 @@ async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event
 
     const toolbeltTargets: TokenDocumentUUID[] = R.filter(
         [target?.document.uuid, getFirstActiveToken(actor)?.uuid],
-        R.isTruthy
+        R.isTruthy,
     );
 
     rollDamageFromFormula(formula, {
