@@ -1,20 +1,14 @@
-import {
-    createHTMLElement,
-    htmlClosest,
-    htmlQuery,
-    R,
-    RenderSettingsConfigOptions,
-} from "module-helpers";
+import { createHTMLElement, htmlClosest, htmlQuery, R, RenderSettingsConfigOptions } from "foundry-helpers";
 
-function onRenderSettingsConfig(
-    app: SettingsConfig,
+export function onRenderSettingsConfig(
+    app: fa.settings.SettingsConfig,
     html: HTMLFormElement,
-    options: RenderSettingsConfigOptions
+    options: RenderSettingsConfigOptions,
 ) {
     for (const category of R.values(options.categories)) {
         const tab = htmlQuery(
             html,
-            `[data-application-part="main"] [data-group="categories"][data-tab="${category.id}"]`
+            `[data-application-part="main"] [data-group="categories"][data-tab="${category.id}"]`,
         );
 
         for (const entry of category.entries) {
@@ -24,8 +18,7 @@ function onRenderSettingsConfig(
 
             if (!setting) continue;
 
-            const scope =
-                "scope" in setting ? setting.scope : setting.restricted ? "world" : "user";
+            const scope = "scope" in setting ? setting.scope : (setting as any).restricted ? "world" : "user";
             const input = entry.menu
                 ? htmlQuery(tab, `[data-key="${entry.key}"]`)
                 : htmlQuery(tab, `[name="${entry.field.name}"]`);
@@ -52,5 +45,3 @@ function onRenderSettingsConfig(
         });
     }
 }
-
-export { onRenderSettingsConfig };

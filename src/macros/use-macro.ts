@@ -1,22 +1,9 @@
-import {
-    ActorPF2e,
-    CharacterPF2e,
-    ChatMessagePF2e,
-    createHTMLElement,
-    findItemWithSourceId,
-    htmlQuery,
-    ItemPF2e,
-    R,
-} from "module-helpers";
+import { createHTMLElement, findItemWithSourceId, htmlQuery, R } from "foundry-helpers";
+import { ActorPF2e, CharacterPF2e, ItemPF2e } from "foundry-pf2e";
 
 const MAN_BAT_UUID = "Compendium.idleuh.effects.Item.B0Cdt3bvfz8LW6QK";
 
-async function useResourceAction(
-    resource: UsableResource,
-    actor: ActorPF2e,
-    item: ItemPF2e,
-    event: Event
-) {
+export async function useResourceAction(resource: UsableResource, actor: ActorPF2e, item: ItemPF2e, event: Event) {
     if (
         !(actor instanceof Actor) ||
         !actor.isOfType("character") ||
@@ -31,9 +18,7 @@ async function useResourceAction(
 
     const resourcePoints = actor.getResource(resource)?.value;
     if (!resourcePoints) {
-        ui.notifications.warn(
-            `<strong>${actor.name}</strong> doesn't have any ${resourceName} left.`
-        );
+        ui.notifications.warn(`<strong>${actor.name}</strong> doesn't have any ${resourceName} left.`);
         return;
     }
 
@@ -78,26 +63,23 @@ async function useResourceAction(
     message.updateSource({ content: content.innerHTML });
 
     const ChatMessagePF2e = getDocumentClass("ChatMessage");
-
-    return ChatMessagePF2e.create(message.toObject() as ChatMessageCreateData<ChatMessagePF2e>, {
-        renderSheet: false,
-    });
+    return ChatMessagePF2e.create(message.toObject(), { renderSheet: false });
 }
 
-function useHeroAction(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
+export function useHeroAction(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
     return useResourceAction("heroPoints", actor, item, event);
 }
 
-function useFocusAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
+export function useFocusAction(actor: ActorPF2e, item: ItemPF2e, event: Event) {
     return useResourceAction("focus", actor, item, event);
 }
 
-async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
+export async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Event) {
     const exist = findItemWithSourceId(actor, MAN_BAT_UUID, "effect");
     const toDelete = R.pipe(
         game.hud?.api.utils.getStances(actor) ?? [],
         R.map(({ effectUUID }) => findItemWithSourceId(actor, effectUUID, "effect")?.id),
-        R.filter(R.isTruthy)
+        R.filter(R.isTruthy),
     );
 
     if (exist) {
@@ -115,5 +97,3 @@ async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, event: Even
 }
 
 type UsableResource = "focus" | "heroPoints";
-
-export { useFocusAction, useHeroAction, useManBatStance };

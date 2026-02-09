@@ -1,6 +1,8 @@
-import { AbilityItemPF2e, ActorPF2e, getFirstActiveToken, R, rollDamageFromFormula } from "module-helpers";
+import { getFirstActiveToken, R, rollDamageFromFormula } from "foundry-helpers";
+import { AbilityItemPF2e, ActorPF2e } from "foundry-pf2e";
+import { TokenDocumentUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
 
-async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event) {
+export async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event) {
     if (!actor.isOfType("character", "npc")) {
         return ui.notifications.warn("Only Characters and NPCs can use this action.");
     }
@@ -61,5 +63,3 @@ async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event
 type FleshBlasterFlag = {
     plugValue: number;
 };
-
-export { envisonDoom };

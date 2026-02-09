@@ -8,22 +8,20 @@ import {
     useHeroAction,
     useManBatStance,
 } from "macros";
-import { MODULE } from "module-helpers";
+import { MODULE } from "foundry-helpers";
 import { onRenderSettingsConfig } from "settings";
 
 MODULE.register("idleuh");
 
-MODULE.apiExpose({
-    macros: {
-        envisonDoom,
-        groupPerception,
-        ripImaginarium,
-        selectVictim,
-        thermalNimbus,
-        useFocusAction,
-        useHeroAction,
-        useManBatStance,
-    },
+MODULE.apiExpose("macros", {
+    envisonDoom,
+    groupPerception,
+    ripImaginarium,
+    selectVictim,
+    thermalNimbus,
+    useFocusAction,
+    useHeroAction,
+    useManBatStance,
 });
 
 Hooks.once(

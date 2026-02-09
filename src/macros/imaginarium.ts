@@ -1,16 +1,11 @@
-import {
-    ActorPF2e,
-    createChatLink,
-    createConsumableFromSpell,
-    findItemWithSourceId,
-    OneToTen,
-    SpellPF2e,
-} from "module-helpers";
+import { createChatLink, createConsumableFromSpell, findItemWithSourceId } from "foundry-helpers";
+import { ActorPF2e, OneToTen, SpellPF2e } from "foundry-pf2e";
+import CompendiumCollection from "foundry-pf2e/foundry/client/documents/collections/compendium-collection.mjs";
 
 const packId = "pf2e.spells-srd";
 const IMAGINARIUM = "Item.dcALVAyJbYSovzqt";
 
-async function ripImaginarium(actor?: ActorPF2e) {
+export async function ripImaginarium(actor?: ActorPF2e) {
     const pack = game.packs.get<CompendiumCollection<SpellPF2e<null>>>(packId);
     if (!pack) return;
 
@@ -20,9 +15,7 @@ async function ripImaginarium(actor?: ActorPF2e) {
 
     const book = findItemWithSourceId(actor, IMAGINARIUM, "equipment");
     if (!book || book.system.equipped.carryType === "dropped") {
-        return ui.notifications.warn(
-            "This character doesn't have the Imaginarium in their possession"
-        );
+        return ui.notifications.warn("This character doesn't have the Imaginarium in their possession");
     }
 
     const rank = Math.max(1, Math.floor(actor.level / 2)) as OneToTen;
@@ -36,7 +29,7 @@ async function ripImaginarium(actor?: ActorPF2e) {
             !x.system.traits.value.includes("cantrip") &&
             !x.system.traits.value.includes("focus") &&
             !x.system.ritual &&
-            x.system.traits.rarity === "common"
+            x.system.traits.rarity === "common",
     );
 
     const roll = Math.floor(Math.random() * entries.length);
@@ -65,5 +58,3 @@ async function ripImaginarium(actor?: ActorPF2e) {
         speaker: ChatMessagePF2e.getSpeaker({ actor }),
     });
 }
-
-export { ripImaginarium };
