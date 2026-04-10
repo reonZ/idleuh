@@ -1,5 +1,12 @@
-import { createHTMLElement, findItemWithSourceId, htmlQuery, R } from "foundry-helpers";
-import { ActorPF2e, CharacterPF2e, ItemPF2e } from "foundry-pf2e";
+import {
+    ActorPF2e,
+    CharacterPF2e,
+    createHTMLElement,
+    findItemWithSourceId,
+    htmlQuery,
+    ItemPF2e,
+    R,
+} from "foundry-helpers";
 
 const MAN_BAT_UUID = "Compendium.idleuh.effects.Item.B0Cdt3bvfz8LW6QK";
 

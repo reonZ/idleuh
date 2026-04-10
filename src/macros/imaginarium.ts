@@ -1,6 +1,12 @@
-import { createChatLink, createConsumableFromSpell, findItemWithSourceId } from "foundry-helpers";
-import { ActorPF2e, OneToTen, SpellPF2e } from "foundry-pf2e";
-import CompendiumCollection from "foundry-pf2e/foundry/client/documents/collections/compendium-collection.mjs";
+import {
+    ActorPF2e,
+    CompendiumCollection,
+    createChatLink,
+    createConsumableFromSpell,
+    findItemWithSourceId,
+    OneToTen,
+    SpellPF2e,
+} from "foundry-helpers";
 
 const packId = "pf2e.spells-srd";
 const IMAGINARIUM = "Item.dcALVAyJbYSovzqt";
@@ -34,12 +40,7 @@ export async function ripImaginarium(actor?: ActorPF2e) {
 
     const roll = Math.floor(Math.random() * entries.length);
     const spell = await pack.getDocument(entries[roll]._id);
-    const scroll =
-        spell &&
-        (await createConsumableFromSpell(spell, {
-            type: "scroll",
-            heightenedLevel: rank,
-        }));
+    const scroll = spell && (await createConsumableFromSpell(spell, { type: "scroll", rank }));
 
     if (!scroll) {
         ui.notifications.error("An error occured while creating an imaginarium scroll");

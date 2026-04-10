@@ -1,6 +1,11 @@
-import { getFirstActiveToken, R, rollDamageFromFormula } from "foundry-helpers";
-import { AbilityItemPF2e, ActorPF2e } from "foundry-pf2e";
-import { TokenDocumentUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+import {
+    AbilityItemPF2e,
+    ActorPF2e,
+    getFirstActiveToken,
+    R,
+    rollDamageFromFormula,
+    TokenDocumentUUID,
+} from "foundry-helpers";
 
 export async function envisonDoom(actor: ActorPF2e, item: AbilityItemPF2e, event: Event) {
     if (!actor.isOfType("character", "npc")) {
