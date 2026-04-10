@@ -9,7 +9,7 @@ import {
 } from "foundry-helpers";
 
 const packId = "pf2e.spells-srd";
-const IMAGINARIUM = "Item.dcALVAyJbYSovzqt";
+const IMAGINARIUM = "Compendium.idleuh.equipment.Item.kkTPJzzulV0JBqoK";
 
 export async function ripImaginarium(actor?: ActorPF2e) {
     const pack = game.packs.get<CompendiumCollection<SpellPF2e<null>>>(packId);
