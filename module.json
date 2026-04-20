@@ -8,20 +8,24 @@
             "discord": "idleatre"
         }
     ],
-    "esmodules": ["scripts/main.js"],
+    "esmodules": [
+        "scripts/main.js"
+    ],
     "compatibility": {
         "minimum": "14.360",
         "verified": "14.360",
         "maximum": "14"
     },
-    "version": "3.13.0",
+    "version": "3.14.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/3.13.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/3.14.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
-    "styles": ["styles/idleuh.css"],
+    "styles": [
+        "styles/idleuh.css"
+    ],
     "socket": true,
     "relationships": {
         "systems": [
@@ -114,7 +118,16 @@
         {
             "name": "Idleuh",
             "sorting": "m",
-            "packs": ["actors", "actions", "effects", "equipment", "feats", "spells", "gm-macros", "players-macros"]
+            "packs": [
+                "actors",
+                "actions",
+                "effects",
+                "equipment",
+                "feats",
+                "spells",
+                "gm-macros",
+                "players-macros"
+            ]
         }
     ]
 }
