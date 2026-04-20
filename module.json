@@ -8,13 +8,11 @@
             "discord": "idleatre"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
-        "minimum": "13.348",
-        "verified": "13.351",
-        "maximum": "13"
+        "minimum": "14.360",
+        "verified": "14.360",
+        "maximum": "14"
     },
     "version": "3.13.0",
     "url": "https://github.com/reonZ/idleuh",
@@ -23,9 +21,7 @@
     "download": "https://github.com/reonZ/idleuh/releases/download/3.13.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
-    "styles": [
-        "styles/idleuh.css"
-    ],
+    "styles": ["styles/idleuh.css"],
     "socket": true,
     "relationships": {
         "systems": [
@@ -34,7 +30,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "7.4.3"
+                    "minimum": "8.0.3"
                 }
             },
             {
@@ -42,7 +38,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.sf2e.json",
                 "compatibility": {
-                    "minimum": "0.0.1"
+                    "minimum": "1.0.3"
                 }
             }
         ]
@@ -118,16 +114,7 @@
         {
             "name": "Idleuh",
             "sorting": "m",
-            "packs": [
-                "actors",
-                "actions",
-                "effects",
-                "equipment",
-                "feats",
-                "spells",
-                "gm-macros",
-                "players-macros"
-            ]
+            "packs": ["actors", "actions", "effects", "equipment", "feats", "spells", "gm-macros", "players-macros"]
         }
     ]
 }
