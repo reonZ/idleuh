@@ -1,3 +1,4 @@
+import { MODULE } from "foundry-helpers";
 import {
     envisonDoom,
     groupPerception,
@@ -9,7 +10,6 @@ import {
     useHeroAction,
     useManBatStance,
 } from "macros";
-import { MODULE } from "foundry-helpers";
 import { onRenderSettingsConfig } from "settings";
 
 MODULE.register("idleuh");

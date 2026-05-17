@@ -29,6 +29,9 @@ function getUserSettings() {
         "pf2e-toolbelt": {
             "actionable.use": true,
             "actionable.apply": true,
+            "betterChat.average": "background",
+            "betterChat.merge": true,
+            "betterChat.inject": false,
             "betterSheet.showPlayers": isGM ? true : undefined,
             "betterSheet.sortList": true,
             "betterSheet.retrainFeats": false,
@@ -38,8 +41,6 @@ function getUserSettings() {
             "betterInventory.splitItem": true,
             "betterMovement.history": true,
             "conditionManager.enabled": true,
-            "mergeDamage.merge": true,
-            "mergeDamage.inject": false,
             "targetHelper.targets": true,
             "targetHelper.checks": true,
             "targetHelper.template": true,
