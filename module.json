@@ -13,14 +13,14 @@
     ],
     "compatibility": {
         "minimum": "14.360",
-        "verified": "14.360",
+        "verified": "14.361",
         "maximum": "14"
     },
-    "version": "3.14.0",
+    "version": "3.15.0",
     "url": "https://github.com/reonZ/idleuh",
     "readme": "https://github.com/reonZ/idleuh/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/idleuh/master/module.json",
-    "download": "https://github.com/reonZ/idleuh/releases/download/3.14.0/module.zip",
+    "download": "https://github.com/reonZ/idleuh/releases/download/3.15.0/module.zip",
     "changelog": "https://github.com/reonZ/idleuh/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/idleuh/issues",
     "styles": [
