@@ -1,4 +1,4 @@
-import { MODULE } from "foundry-helpers";
+import { MODULE, SYSTEM } from "foundry-helpers";
 import {
     envisonDoom,
     groupPerception,
@@ -30,7 +30,7 @@ MODULE.apiExpose("macros", {
 Hooks.once(
     "triggerEngine.registerTriggers",
     (registerTriggers: (moduleId: string, applicationId: string, filePath: string) => void) => {
-        registerTriggers("trigger-engine", "pf2e-trigger", `modules/${MODULE.id}/pf2e-triggers.json`);
+        registerTriggers("trigger-engine", "pf2e-trigger", `modules/${MODULE.id}/${SYSTEM.id}-triggers.json`);
     },
 );
 
