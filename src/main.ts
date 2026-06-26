@@ -1,6 +1,7 @@
 import { MODULE, SYSTEM } from "foundry-helpers";
 import {
     envisonDoom,
+    getEmGood,
     groupPerception,
     ripImaginarium,
     selectVictim,
@@ -16,6 +17,7 @@ MODULE.register("idleuh");
 
 MODULE.apiExpose("macros", {
     envisonDoom,
+    getEmGood,
     groupPerception,
     ripImaginarium,
     selectVictim,
