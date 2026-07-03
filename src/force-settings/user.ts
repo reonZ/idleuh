@@ -43,6 +43,7 @@ function getUserSettings() {
             "conditionManager.enabled": true,
             "targetHelper.targets": true,
             "targetHelper.checks": true,
+            "targetHelper.expend": true,
             "targetHelper.template": true,
             "betterTrade.invertTrade": isGM ? undefined : true,
         },
