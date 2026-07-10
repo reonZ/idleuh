@@ -47,7 +47,7 @@ async function transferVitality(token?: TokenPF2e) {
     const max = Math.min(resource.value, cap, needed);
 
     const content = `<div class="form-group" style="width: 300px;">
-        <label>Heal Transferred</label>
+        <label>Heal Transferred (${resource.value} remaining)</label>
         <div class="form-fields" style="flex: 0 0 4em;">
             <input type="number" name="input" value="${max}" min="1" max="${max}">
         </div>
