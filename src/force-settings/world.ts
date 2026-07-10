@@ -33,71 +33,6 @@ const permissions = {
     MESSAGE_WHISPER: [2, 3, 4],
 };
 
-const prototypeTokenOverrides = {
-    base: {
-        sight: {},
-        ring: {},
-        lockRotation: true,
-        turnMarker: {},
-    },
-    army: {
-        sight: {},
-        ring: {},
-        turnMarker: {},
-    },
-    familiar: {
-        displayName: 30,
-        displayBars: 30,
-        sight: {
-            enabled: true,
-        },
-        ring: {},
-        turnMarker: {},
-    },
-    hazard: {
-        sight: {},
-        ring: {},
-        turnMarker: {},
-    },
-    loot: {
-        sight: {},
-        ring: {},
-        turnMarker: {},
-    },
-    party: {
-        sight: {},
-        ring: {},
-        turnMarker: {},
-    },
-    vehicle: {
-        displayName: 0,
-        displayBars: 0,
-        sight: {
-            enabled: true,
-        },
-        ring: {},
-        turnMarker: {},
-    },
-    character: {
-        displayName: 30,
-        displayBars: 30,
-        sight: {
-            enabled: true,
-        },
-        ring: {},
-        turnMarker: {},
-    },
-    npc: {
-        displayName: 20,
-        displayBars: 20,
-        sight: {
-            enabled: true,
-        },
-        ring: {},
-        turnMarker: {},
-    },
-};
-
 const healthStatusData = {
     dead: "Dead",
     enabled: true,
@@ -115,7 +50,6 @@ const worldSettings = {
         animateRollTable: false,
         combatTrackerConfig,
         permissions,
-        prototypeTokenOverrides,
         tokenAutoRotate: false,
         tokenDragPreview: false,
     },

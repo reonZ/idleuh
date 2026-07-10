@@ -15,6 +15,7 @@ function getUserSettings() {
         },
         "pf2e-hud": {
             "foundrySidebar.expand": true,
+            "foundrySidebar.noFormat": true,
             "foundrySidebar.noRollMode": true,
             "tracker.enabled": true,
             "dice.enabled": true,
