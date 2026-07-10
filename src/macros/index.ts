@@ -6,3 +6,4 @@ export * from "./select-victime";
 export * from "./set-settings";
 export * from "./thermal-nimbus";
 export * from "./use-macro";
+export * from "./vitality-network";

@@ -32,7 +32,7 @@ async function getEmGood(originToken?: TokenPF2e) {
         return ui.notifications.warn("Your token doesn't gave the \"Get 'Em!\" action.");
     }
 
-    const target = R.first([...game.user.targets]);
+    const target = R.only([...game.user.targets]);
 
     if (!target || target.scene !== originToken.scene || target.distanceTo(originToken) > 60) {
         return ui.notifications.warn("You must target one creature within 60ft.");
