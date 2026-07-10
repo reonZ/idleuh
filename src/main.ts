@@ -1,7 +1,9 @@
-import { MODULE, SYSTEM } from "foundry-helpers";
+import { convertToCallOptions, EmitablePacket, MODULE, SYSTEM } from "foundry-helpers";
 import {
+    enactGetEmGood,
     envisonDoom,
     getEmGood,
+    GetEmGoodQueryArgs,
     groupPerception,
     ripImaginarium,
     selectVictim,
@@ -12,8 +14,9 @@ import {
     useManBatStance,
 } from "macros";
 import { onRenderSettingsConfig } from "settings";
+import { id } from "../module.json";
 
-MODULE.register("idleuh");
+MODULE.register(id);
 
 MODULE.apiExpose("macros", {
     envisonDoom,
@@ -29,6 +32,15 @@ MODULE.apiExpose("macros", {
     useManBatStance,
 });
 
+Hooks.once("init", () => {
+    CONFIG.queries[MODULE.path("user-query")] = async (data: UserQueryArgs) => {
+        if (data._type === "get-em-good") {
+            const options = await convertToCallOptions(data);
+            enactGetEmGood(options);
+        }
+    };
+});
+
 Hooks.once(
     "triggerEngine.registerTriggers",
     (registerTriggers: (moduleId: string, applicationId: string, filePath: string) => void) => {
@@ -37,3 +49,5 @@ Hooks.once(
 );
 
 Hooks.on("renderSettingsConfig", onRenderSettingsConfig);
+
+type UserQueryArgs = EmitablePacket<GetEmGoodQueryArgs>;

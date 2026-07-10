@@ -2,10 +2,16 @@ import {
     ActorPF2e,
     actorsRespectAlliance,
     ChoiceSetSource,
+    convertToEmitOptions,
+    displayEmiting,
     EffectSource,
+    EmitablePacket,
     findItemWithSourceId,
     getItemSourceFromUuid,
+    ItemSourcePF2e,
+    MODULE,
     R,
+    ScenePF2e,
     TokenMarkRuleElement,
     TokenPF2e,
 } from "foundry-helpers";
@@ -28,7 +34,7 @@ async function getEmGood(originToken?: TokenPF2e) {
 
     const target = R.first([...game.user.targets]);
 
-    if (!target || target.distanceTo(originToken) > 60) {
+    if (!target || target.scene !== originToken.scene || target.distanceTo(originToken) > 60) {
         return ui.notifications.warn("You must target one creature within 60ft.");
     }
 
@@ -47,11 +53,11 @@ async function getEmGood(originToken?: TokenPF2e) {
         target: null,
     };
 
-    const targetUUID = target.document.uuid;
     const markRule = effectSource.system.rules.find(
         (rule) => rule.key === "TokenMark",
     ) as TokenMarkRuleElement["_source"];
 
+    const targetUUID = target.document.uuid;
     markRule.uuid = targetUUID;
 
     const targetIsAsset = originActor.itemTypes.effect.some((effect) => {
@@ -71,10 +77,28 @@ async function getEmGood(originToken?: TokenPF2e) {
     }
 
     const [originEffect] = await originActor.createEmbeddedDocuments("Item", [effectSource]);
-    const originSource = originEffect.toObject();
+
+    const getEmGoodOptions: GetEmGoodQueryArgs = {
+        _type: "get-em-good",
+        originActor,
+        scene: originToken.scene,
+        source: originEffect.toObject(),
+    };
+
+    if (game.user.isActiveGM) {
+        enactGetEmGood(getEmGoodOptions);
+    } else {
+        displayEmiting();
+        const queryArgs: EmitablePacket<GetEmGoodQueryArgs> = convertToEmitOptions(getEmGoodOptions);
+        game.users.activeGM?.query(MODULE.path("user-query"), queryArgs);
+    }
+}
+
+async function enactGetEmGood({ originActor, scene, source }: Omit<GetEmGoodQueryArgs, "_type">) {
+    if (!scene || !originActor || !source) return;
 
     await Promise.all(
-        originToken.scene.tokens.map(async (token) => {
+        scene.tokens.map(async (token) => {
             const actor = token.actor;
 
             if (
@@ -84,10 +108,18 @@ async function getEmGood(originToken?: TokenPF2e) {
             )
                 return;
 
-            const cloned = foundry.utils.deepClone(originSource);
+            const cloned = foundry.utils.deepClone(source);
             return (actor as ActorPF2e).createEmbeddedDocuments("Item", [cloned]);
         }),
     );
 }
 
-export { getEmGood };
+type GetEmGoodQueryArgs = {
+    _type: "get-em-good";
+    originActor: ActorPF2e;
+    scene: ScenePF2e;
+    source: ItemSourcePF2e;
+};
+
+export { enactGetEmGood, getEmGood };
+export type { GetEmGoodQueryArgs };
