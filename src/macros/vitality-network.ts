@@ -25,7 +25,7 @@ async function transferVitality(token?: TokenPF2e) {
     if (!resource) return;
 
     if (resource.value <= 0) {
-        return ui.notifications.warn("You don't have any more <strong>Vitality Network</strong> charges.");
+        return ui.notifications.warn(`You don't have any more <strong>${resource.label}</strong> charges.`);
     }
 
     const targetToken = R.only([...game.user.targets]);
@@ -56,7 +56,7 @@ async function transferVitality(token?: TokenPF2e) {
     const result = await waitDialog<{ input: number }>({
         content,
         i18n: "",
-        title: "Transfer Vitality",
+        title: item.name,
         yes: { label: "Transfer" },
     });
 
@@ -82,14 +82,14 @@ async function rechargeVitalityNetwork(actor: CharacterPF2e) {
     if (!resource) return;
 
     if (resource.value >= resource.max) {
-        return ui.notifications.info("You don't need to recharge your <strong>Vitality Network</strong> charges.");
+        return ui.notifications.info(`You don't need to recharge your <strong>${resource.label}</strong> charges.`);
     }
 
     actor.updateResource("vitalityNetwork", resource.max);
 
     const ChatMessagePF2e = getDocumentClass("ChatMessage");
     ChatMessagePF2e.create({
-        content: "Has fully recharged its Vitality Network.",
+        content: `Has fully recharged its ${resource.label}.`,
         speaker: ChatMessagePF2e.getSpeaker({ actor }),
     });
 }
