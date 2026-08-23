@@ -97,21 +97,24 @@ async function getEmGood(originToken?: TokenPF2e) {
 async function enactGetEmGood({ originActor, scene, source }: Omit<GetEmGoodQueryArgs, "_type">) {
     if (!scene || !originActor || !source) return;
 
-    await Promise.all(
-        scene.tokens.map(async (token) => {
-            const actor = token.actor;
+    const operations = scene.tokens.map((token): ModifyBatchOperation | undefined => {
+        const actor = token.actor;
+        if (
+            !token.object ||
+            !actor?.isOfType("character", "npc") ||
+            !actorsRespectAlliance(originActor, actor, "allies")
+        )
+            return;
 
-            if (
-                !token.object ||
-                !actor?.isOfType("character", "npc") ||
-                !actorsRespectAlliance(originActor, actor, "allies")
-            )
-                return;
+        return {
+            action: "create",
+            data: [foundry.utils.deepClone(source)],
+            documentName: "Item",
+            parent: actor,
+        };
+    });
 
-            const cloned = foundry.utils.deepClone(source);
-            return (actor as ActorPF2e).createEmbeddedDocuments("Item", [cloned]);
-        }),
-    );
+    return foundry.documents.modifyBatch(R.filter(operations, R.isTruthy));
 }
 
 type GetEmGoodQueryArgs = {
