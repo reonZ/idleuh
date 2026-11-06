@@ -9,7 +9,6 @@ import {
     EmitablePacket,
     findItemWithSourceId,
     getItemSourceFromUuid,
-    ItemSourcePF2e,
     MODULE,
     R,
     ScenePF2e,
@@ -84,7 +83,7 @@ async function getEmGood(originToken?: TokenPF2e) {
         _type: "get-em-good",
         originActor,
         scene: originToken.scene,
-        source: originEffect.toObject(),
+        source: originEffect.toObject() as EffectSource,
         targetActor: target.actor,
     };
 
@@ -100,30 +99,34 @@ async function getEmGood(originToken?: TokenPF2e) {
 async function enactGetEmGood({ originActor, scene, source, targetActor }: Omit<GetEmGoodQueryArgs, "_type">) {
     if (!scene || !originActor || !source) return;
 
-    const operations = scene.tokens.map((token): ModifyBatchOperation | undefined => {
-        const actor = token.actor;
-        if (
-            !token.object ||
-            !actor?.isOfType("character", "npc") ||
-            !actorsRespectAlliance(originActor, actor, "allies")
-        )
-            return;
+    const operations = scene.tokens
+        .map((token): ModifyBatchOperation | undefined => {
+            const actor = token.actor;
+            console.log(actor?.name);
+            if (
+                !token.object ||
+                !actor?.isOfType("character", "npc") ||
+                !actorsRespectAlliance(originActor, actor, "allies")
+            )
+                return;
 
-        return {
-            action: "create",
-            data: [foundry.utils.deepClone(source)],
-            documentName: "Item",
-            parent: actor,
-        };
-    });
+            return {
+                action: "create",
+                data: [foundry.utils.deepClone(source)],
+                documentName: "Item",
+                parent: actor,
+            };
+        })
+        .filter(R.isTruthy);
 
     if (targetActor) {
-        const targetSource = await fromUuid<EffectPF2e>(GETEM_TARGET_UUID);
+        const targetSource = (await fromUuid<EffectPF2e>(GETEM_TARGET_UUID))?.toObject();
 
         if (targetSource) {
+            targetSource.system.context = foundry.utils.deepClone(source.system.context);
             operations.push({
                 action: "create",
-                data: [targetSource.toObject()],
+                data: [targetSource],
                 documentName: "Item",
                 parent: targetActor,
             });
@@ -137,7 +140,7 @@ type GetEmGoodQueryArgs = {
     _type: "get-em-good";
     originActor: ActorPF2e;
     scene: ScenePF2e;
-    source: ItemSourcePF2e;
+    source: EffectSource;
     targetActor: ActorPF2e | null;
 };
 
