@@ -10,7 +10,12 @@ import {
 
 const MAN_BAT_UUID = "Compendium.idleuh.effects.Item.B0Cdt3bvfz8LW6QK";
 
-export async function useResourceAction(resource: UsableResource, actor: ActorPF2e, item: ItemPF2e, event: Event) {
+export async function useResourceAction(
+    resource: UsableResource,
+    actor: ActorPF2e,
+    item: ItemPF2e,
+    event: Event,
+) {
     if (
         !(actor instanceof Actor) ||
         !actor.isOfType("character") ||
@@ -25,7 +30,9 @@ export async function useResourceAction(resource: UsableResource, actor: ActorPF
 
     const resourcePoints = actor.getResource(resource)?.value;
     if (!resourcePoints) {
-        ui.notifications.warn(`<strong>${actor.name}</strong> doesn't have any ${resourceName} left.`);
+        ui.notifications.warn(
+            `<strong>${actor.name}</strong> doesn't have any ${resourceName} left.`,
+        );
         return;
     }
 
@@ -94,7 +101,7 @@ export async function useManBatStance(actor: CharacterPF2e, item: ItemPF2e, even
     } else {
         const message = await useFocusAction(actor, item, event);
         if (message) {
-            await game.hud?.api.utils.addStance(actor, MAN_BAT_UUID, false);
+            await game.hud?.api.utils.addStance(actor, MAN_BAT_UUID);
         }
     }
 

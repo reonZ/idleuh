@@ -4,6 +4,7 @@ import {
     ChoiceSetSource,
     convertToEmitOptions,
     displayEmiting,
+    EffectPF2e,
     EffectSource,
     EmitablePacket,
     findItemWithSourceId,
@@ -18,6 +19,7 @@ import {
 
 const GETEM_ACTION_UUID = "Compendium.sf2e.actions.Item.cmCtfURzpbzkxWsy";
 const GETEM_EFFECT_UUID = "Compendium.sf2e.feat-effects.Item.ey2zSEnprAGgvrij";
+const GETEM_TARGET_UUID = "Compendium.idleuh.effects-sf2e.Item.VOUyLr3ocmDdWFOj";
 
 async function getEmGood(originToken?: TokenPF2e) {
     const originActor = originToken?.actor;
@@ -83,6 +85,7 @@ async function getEmGood(originToken?: TokenPF2e) {
         originActor,
         scene: originToken.scene,
         source: originEffect.toObject(),
+        targetActor: target.actor,
     };
 
     if (game.user.isActiveGM) {
@@ -94,7 +97,7 @@ async function getEmGood(originToken?: TokenPF2e) {
     }
 }
 
-async function enactGetEmGood({ originActor, scene, source }: Omit<GetEmGoodQueryArgs, "_type">) {
+async function enactGetEmGood({ originActor, scene, source, targetActor }: Omit<GetEmGoodQueryArgs, "_type">) {
     if (!scene || !originActor || !source) return;
 
     const operations = scene.tokens.map((token): ModifyBatchOperation | undefined => {
@@ -114,6 +117,19 @@ async function enactGetEmGood({ originActor, scene, source }: Omit<GetEmGoodQuer
         };
     });
 
+    if (targetActor) {
+        const targetSource = await fromUuid<EffectPF2e>(GETEM_TARGET_UUID);
+
+        if (targetSource) {
+            operations.push({
+                action: "create",
+                data: [targetSource.toObject()],
+                documentName: "Item",
+                parent: targetActor,
+            });
+        }
+    }
+
     return foundry.documents.modifyBatch(R.filter(operations, R.isTruthy));
 }
 
@@ -122,6 +138,7 @@ type GetEmGoodQueryArgs = {
     originActor: ActorPF2e;
     scene: ScenePF2e;
     source: ItemSourcePF2e;
+    targetActor: ActorPF2e | null;
 };
 
 export { enactGetEmGood, getEmGood };
